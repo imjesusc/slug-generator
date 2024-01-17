@@ -21,6 +21,6 @@ model ShortenedUrl {
 model SimpleShortenedUrl {
     id          Int      @id @default(autoincrement())
     originalUrl String  
-    slug        String   @unique
+    customSlug  String   @unique
     createdAt   DateTime @default(now())
 }
