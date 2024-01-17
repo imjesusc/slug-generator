@@ -16,19 +16,43 @@ import {
 
 const formSchema = z.object({
   originalUrl: z.string().refine((url) => /^(https?|ssh):\/\/[^\s\/$.?#].[^\s]*$/.test(url)),
-  slug: z.string().refine((value) => /^[a-zA-Z0-9_.-]+$/.test(value))
+  customSlug: z.string().refine((value) => /^[a-zA-Z0-9_.-]+$/.test(value))
 })
+
 export const SimpleSlugForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       originalUrl: "",
-      slug: "",
+      customSlug: "",
     },
   })
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data)
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  
+    const OPTIONS = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+     try {
+        const response = await  fetch("/api/slug", OPTIONS)
+
+        if(!response.ok) {
+          const errorData = await response.json()
+          console.log(errorData)
+        } else {
+          const resData = await response.json()
+          console.log(resData)
+        }
+        
+     } catch (error) {
+        if(error instanceof Error) {
+          return error.message
+        }
+     }
   }
 
   return (
@@ -51,7 +75,7 @@ export const SimpleSlugForm = () => {
 
         <FormField
           control={form.control}
-          name="slug"
+          name="customSlug"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Custom slug</FormLabel>
