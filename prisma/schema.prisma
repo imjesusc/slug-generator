@@ -7,12 +7,19 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model ShortenedUrl {
   id Int @id @default(autoincrement())
+  slug String @unique
   originalUrl String
   shortUrl String @unique
+}
+
+model SimpleShortenedUrl {
+    id          Int      @id @default(autoincrement())
+    originalUrl String  
+    slug        String   @unique
 }
