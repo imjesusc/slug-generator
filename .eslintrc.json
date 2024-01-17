@@ -3,6 +3,9 @@
         "browser": true,
         "es2021": true
     },
+    "compilerOptions": {
+        "strict": true
+      },
     "extends": [
         "standard-with-typescript",
         "plugin:react/recommended"
