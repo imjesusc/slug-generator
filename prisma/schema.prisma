@@ -22,4 +22,5 @@ model SimpleShortenedUrl {
     id          Int      @id @default(autoincrement())
     originalUrl String  
     slug        String   @unique
+    createdAt   DateTime @default(now())
 }
