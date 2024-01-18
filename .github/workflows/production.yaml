@@ -8,53 +8,43 @@ env:
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
-  Deploy-production:
+  deploy-production:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Cancel Previous Rebundant Builds
+      - name: Cancel Previous Redundant Builds
         uses: styfle/cancel-workflow-action@0.11.0
         with:
           access_token: ${{ github.token }}
 
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 18 
 
-      - uses: pnpm/action-setup@v2
-        name: Install pnpm
-        id: pnpm-install
-        with:
-          version: 8
-          run_install: false
+      - name: Install pnpm
+        run: npm install -g pnpm@5
 
-      - uses: actions/cache@v2
-        name: Setup pnpm cache
-        with:
-          path: |
-            node_modules/.pnpm
-          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            pnpm-${{ runner.os }}-
+      - name: Install Vercel CLI
+        run: pnpm i -g vercel@latest
 
       - name: Install Dependencies
         run: pnpm install
 
       - name: Lint
-        run: pnpm lint
+        run: pnpm run lint
 
       - name: Build
-        run: pnpm build
-
-      - name: Install Vercel CLI
-        run: pnpm i -g vercel@latest
+        run: pnpm run build
 
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
