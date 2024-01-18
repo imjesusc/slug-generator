@@ -1,70 +1,70 @@
-"use client"
- 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
+'use client'
+
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import type * as z from 'zod'
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-  Button, 
+  Button,
   Form,
-   Input
-} from "@/components/ui"
-import useLinkStore from "@/store/linkStore"
-import { simpleFormSchema } from "@/lib/validations/simpleFormSchema"
-import { useState } from "react"
-import { toast } from "sonner"
+  Input
+} from '@/components/ui'
+import useLinkStore from '@/store/linkStore'
+import { simpleFormSchema } from '@/lib/validations/simpleFormSchema'
+import { type ReactNode, useState } from 'react'
+import { toast } from 'sonner'
+import { type SimpleSlugInterface } from '@/models'
 
 export const SimpleSlugForm = () => {
-  const {links, setLinks} = useLinkStore()
+  const { links, setLinks } = useLinkStore()
   const [isLoading, setIsLoading] = useState(false)
-  
+
   const form = useForm<z.infer<typeof simpleFormSchema>>({
     resolver: zodResolver(simpleFormSchema),
     defaultValues: {
-      originalUrl: "",
-      customSlug: "",
-    },
+      originalUrl: '',
+      customSlug: ''
+    }
   })
 
   const onSubmit = async (data: z.infer<typeof simpleFormSchema>) => {
-  setIsLoading(true)
+    setIsLoading(true)
     const OPTIONS = {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(data)
     }
-     try {
-        const response = await  fetch("/api/slug", OPTIONS)
+    try {
+      const response = await fetch('/api/slug', OPTIONS)
 
-        if(!response.ok) {
-          const errorData = await response.json()
-          console.log(errorData)
-          toast.error(errorData.message)
-        } else {
-          const resData = await response.json()
-          setLinks([...links, resData])
-          toast.success("Custom slug created!")
-          form.reset()
-        }
-        
-     } catch (error) {
-        if(error instanceof Error) {
-          return error.message
-        }
-     } finally {
+      if (!response.ok) {
+        const errorData = await response.json()
+        console.log(errorData)
+        toast.error(errorData.message as ReactNode)
+      } else {
+        const resData = await response.json()
+        setLinks([...links, resData as SimpleSlugInterface])
+        toast.success('Custom slug created!')
+        form.reset()
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        return error.message
+      }
+    } finally {
       setIsLoading(false)
-     }
+    }
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}
+      <form onSubmit={form.handleSubmit(onSubmit) as any}
       className="grid gap-4 tablet:grid-cols-2 w-full">
         <FormField
           control={form.control}
@@ -93,9 +93,9 @@ export const SimpleSlugForm = () => {
             </FormItem>
           )}
         />
-      
+
         <div className="tablet:col-span-2">
-          <Button className="w-full">{isLoading ? "Creating..." : "Create" }</Button>
+          <Button className="w-full">{isLoading ? 'Creating...' : 'Create' }</Button>
         </div>
       </form>
     </Form>
