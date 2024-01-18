@@ -1,7 +1,6 @@
-import { SimpleSlugInterface } from "@/models";
-import  { create } from "zustand";
-import { persist} from "zustand/middleware"
-
+import { type SimpleSlugInterface } from '@/models'
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 interface LinkStoreProps {
   links: SimpleSlugInterface[]
@@ -12,16 +11,17 @@ const useLinkStore = create(
   persist<LinkStoreProps>(
     (set, get) => ({
       links: [],
-      setLinks: (links) => set((state) => ({
-        ...state,
-        links
-      })),
+      setLinks: (links) => {
+        set((state) => ({
+          ...state,
+          links
+        }))
+      }
     }),
     {
       name: 'links'
     }
   )
-);
-
+)
 
 export default useLinkStore
