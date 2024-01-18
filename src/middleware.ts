@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest, ev: NextFetchEvent) {
   const apiURL = request.nextUrl.origin
   const res = await fetch(`${apiURL}/api/slug/${slug}`)
   if (res.status === 404) {
-    return NextResponse.redirect(new URL('/'));
+    return NextResponse.redirect(request.nextUrl.origin);
   }
   
   const data = await res.json()
@@ -21,5 +21,5 @@ export async function middleware(request: NextRequest, ev: NextFetchEvent) {
 }
 
 export const config = {
-  matcher: '/cs/:slug*',
+  matcher: '/ss/:slug*',
 }

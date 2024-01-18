@@ -13,23 +13,25 @@ import {
   Form,
    Input
 } from "@/components/ui"
-
-const formSchema = z.object({
-  originalUrl: z.string().refine((url) => /^(https?|ssh):\/\/[^\s\/$.?#].[^\s]*$/.test(url)),
-  customSlug: z.string().refine((value) => /^[a-zA-Z0-9_.-]+$/.test(value))
-})
+import useLinkStore from "@/store/linkStore"
+import { simpleFormSchema } from "@/lib/validations/simpleFormSchema"
+import { useState } from "react"
+import { toast } from "sonner"
 
 export const SimpleSlugForm = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const {links, setLinks} = useLinkStore()
+  const [isLoading, setIsLoading] = useState(false)
+  
+  const form = useForm<z.infer<typeof simpleFormSchema>>({
+    resolver: zodResolver(simpleFormSchema),
     defaultValues: {
       originalUrl: "",
       customSlug: "",
     },
   })
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
-  
+  const onSubmit = async (data: z.infer<typeof simpleFormSchema>) => {
+  setIsLoading(true)
     const OPTIONS = {
       method: "POST",
       headers: {
@@ -43,22 +45,27 @@ export const SimpleSlugForm = () => {
         if(!response.ok) {
           const errorData = await response.json()
           console.log(errorData)
+          toast.error(errorData.message)
         } else {
           const resData = await response.json()
-          console.log(resData)
+          setLinks([...links, resData])
+          toast.success("Custom slug created!")
+          form.reset()
         }
         
      } catch (error) {
         if(error instanceof Error) {
           return error.message
         }
+     } finally {
+      setIsLoading(false)
      }
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}
-      className="grid gap-4 grid-cols-2">
+      className="grid gap-4 tablet:grid-cols-2 w-full">
         <FormField
           control={form.control}
           name="originalUrl"
@@ -66,7 +73,7 @@ export const SimpleSlugForm = () => {
             <FormItem>
               <FormLabel>Enter url here</FormLabel>
               <FormControl>
-                <Input type="text" placeholder="https://example.com" {...field} />
+                <Input type="text" placeholder="https://custom-slug.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -80,15 +87,15 @@ export const SimpleSlugForm = () => {
             <FormItem>
               <FormLabel>Custom slug</FormLabel>
               <FormControl>
-                <Input type="text" placeholder="imjesus" {...field} />
+                <Input type="text" placeholder="custom-slug" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
       
-        <div className="col-span-2">
-          <Button>Generate</Button>
+        <div className="tablet:col-span-2">
+          <Button className="w-full">{isLoading ? "Creating..." : "Create" }</Button>
         </div>
       </form>
     </Form>
