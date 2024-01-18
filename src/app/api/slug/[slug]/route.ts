@@ -4,7 +4,7 @@ import { NextResponse } from "next/server"
 
 export async function GET (request: Request, {params}: {params: { slug: string}}) {
   const { slug } = params
-  const slugUrl = `/cs/${slug}`
+  const slugUrl = `/ss/${slug}`
 
   
   try {

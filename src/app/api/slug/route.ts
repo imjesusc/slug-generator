@@ -4,7 +4,7 @@ import { Prisma } from '@prisma/client'
 
 export async function POST(request: Request) {
   const { originalUrl, customSlug } = await request.json()
-  const slugUrl = `/cs/${customSlug}`
+  const slugUrl = `/ss/${customSlug}`
  
   try {
     const existingSlug = await prisma.simpleShortenedUrl.findUnique({
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(
       { originalUrl,
-        url: `${request.headers.get('x-forwarded-proto')}://${request.headers.get('host')}/cs/${customSlug}`,
+        url: `${request.headers.get('x-forwarded-proto')}://${request.headers.get('host')}/ss/${customSlug}`,
         customSlug: slugUrl, 
         message: 'Slug created successfully' },
     );
