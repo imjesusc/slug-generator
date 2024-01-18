@@ -1,8 +1,10 @@
-import { SimpleSlugForm } from '@/components/organisms'
-
+import { SimpleSlugForm, SimpleSlugTable } from '@/components/organisms'
 export default function Home () {
-  return <main className='w-screen h-screen grid gap-10 place-content-center'>
-    <h1 className='text-3xl font-bold'>Generate a custom slug</h1>
+  return (
+  <main className='w-screen h-auto  my-10 laptop:mt-56 container grid gap-10 place-content-center'>
+    <h1 className='text-4xl text-balance font-bold'>Open Source Custom Link Slug Generator</h1>
     <SimpleSlugForm />
+    <SimpleSlugTable />
   </main>
+  )
 }
