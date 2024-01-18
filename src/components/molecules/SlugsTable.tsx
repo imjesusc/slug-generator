@@ -5,16 +5,16 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import { SimpleSlugInterface, SlugsTableProps } from "@/models"
-import Link from "next/link"
-import { FC } from "react"
-import { Button } from "../ui"
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { toast } from "sonner"
-import { cn } from "@/lib/utils"
-export const SlugsTable: FC<SlugsTableProps> = ({links}) => {
+  TableRow
+} from '@/components/ui/table'
+import { type SimpleSlugInterface, type SlugsTableProps } from '@/models'
+import Link from 'next/link'
+import { type FC } from 'react'
+import { Button } from '../ui'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
+import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
+export const SlugsTable: FC<SlugsTableProps> = ({ links }) => {
   return (
     <Table className="w-full overflow-hidden">
     <TableCaption>A list of your recent custom slugs.</TableCaption>
@@ -24,16 +24,16 @@ export const SlugsTable: FC<SlugsTableProps> = ({links}) => {
         <TableHead className="truncate">Complete URL</TableHead>
       </TableRow>
     </TableHeader>
-    
+
     <TableBody>
       {links.map((link: SimpleSlugInterface, index) => (
-        <TableRow  key={link.customSlug} className={cn(index === 0 && "bg-[#adfa1d] hover:bg-[#adfa1d] hover:opacity-80")}>
+        <TableRow key={link.customSlug} className={cn(index === 0 && 'bg-[#adfa1d] hover:bg-[#adfa1d] hover:opacity-80')}>
           <TableCell>
-            <Link 
-            className="hover:underline font-medium" 
-            target="_blank" 
+            <Link
+            className="hover:underline font-medium"
+            target="_blank"
             title={link.customSlug}
-            rel="noopener noreferrer" 
+            rel="noopener noreferrer"
             href={`${link.url}`}>
               {link.customSlug}
             </Link>
@@ -44,11 +44,11 @@ export const SlugsTable: FC<SlugsTableProps> = ({links}) => {
           <TableCell className="grid justify-end">
             <CopyToClipboard text={link.url}>
             <Button
-              className={cn(index === 0 && "bg-[#adfa1d] hover:bg-[#adfa1d] hover:opacity-80")}
+              className={cn(index === 0 && 'bg-[#adfa1d] hover:bg-[#adfa1d] hover:opacity-80')}
               variant="outline"
               onClick={() =>
                 toast.success(
-                  `Copied ${link.customSlug} custom slug to clipboard`,
+                  `Copied ${link.customSlug} custom slug to clipboard`
                 )
                }
               >

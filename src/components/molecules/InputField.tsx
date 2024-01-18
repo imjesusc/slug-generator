@@ -1,6 +1,6 @@
 import { Input, Label } from '@/components/ui'
 import { cn } from '@/lib/utils'
-import { FC } from 'react'
+import { type FC } from 'react'
 
 interface InputFieldProps {
   label: string
@@ -11,16 +11,15 @@ interface InputFieldProps {
   field?: any
 }
 
-
-export const InputField : FC<InputFieldProps> = ({label, value, name, placeholder,field, className}) => {
+export const InputField: FC<InputFieldProps> = ({ label, value, name, placeholder, field, className }) => {
   return (
     <div className={cn(className)}>
       <Label htmlFor={name}>{label}</Label>
-      <Input id={name} 
-      value={value} 
+      <Input id={name}
+      value={value}
       name={name}
-      placeholder={placeholder} 
-      {...field}      
+      placeholder={placeholder}
+      {...field}
       />
     </div>
   )

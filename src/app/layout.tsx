@@ -10,13 +10,11 @@ export const metadata: Metadata = {
   title: 'Custom slug generator',
   description: 'Open source custom slug generator—create unique and memorable slugs for any purpose.',
   icons: {
-		icon: '/favicon.ico?v=1',
-		shortcut: '/favicon-16x16.png',
-		apple: '/apple-touch-icon.png'
-	},
+    icon: '/favicon.ico?v=1',
+    shortcut: '/favicon-16x16.png',
+    apple: '/apple-touch-icon.png'
+  }
 }
-
-
 
 export default function RootLayout ({
   children

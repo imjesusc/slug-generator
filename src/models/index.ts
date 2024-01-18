@@ -1,2 +1,2 @@
-export * from './SimpleSlug.interface';
-export * from './SlugsTable.interface';
+export * from './SimpleSlug.interface'
+export * from './SlugsTable.interface'
