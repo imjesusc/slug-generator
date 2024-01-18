@@ -1,0 +1,64 @@
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { SimpleSlugInterface, SlugsTableProps } from "@/models"
+import Link from "next/link"
+import { FC } from "react"
+import { Button } from "../ui"
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { toast } from "sonner"
+import { cn } from "@/lib/utils"
+export const SlugsTable: FC<SlugsTableProps> = ({links}) => {
+  return (
+    <Table className="w-full overflow-hidden">
+    <TableCaption>A list of your recent custom slugs.</TableCaption>
+    <TableHeader>
+      <TableRow>
+        <TableHead className="truncate max-w-[300px]">Custom url slug</TableHead>
+        <TableHead className="truncate">Complete URL</TableHead>
+      </TableRow>
+    </TableHeader>
+    
+    <TableBody>
+      {links.map((link: SimpleSlugInterface, index) => (
+        <TableRow  key={link.customSlug} className={cn(index === 0 && "bg-[#adfa1d] hover:bg-[#adfa1d] hover:opacity-80")}>
+          <TableCell>
+            <Link 
+            className="hover:underline font-medium" 
+            target="_blank" 
+            title={link.customSlug}
+            rel="noopener noreferrer" 
+            href={`${link.url}`}>
+              {link.customSlug}
+            </Link>
+            </TableCell>
+          <TableCell className="truncate text-black/50 max-w-10 tablet:max-w-[300px]">
+            {link.originalUrl}
+          </TableCell>
+          <TableCell className="grid justify-end">
+            <CopyToClipboard text={link.url}>
+            <Button
+              className={cn(index === 0 && "bg-[#adfa1d] hover:bg-[#adfa1d] hover:opacity-80")}
+              variant="outline"
+              onClick={() =>
+                toast.success(
+                  `Copied ${link.customSlug} custom slug to clipboard`,
+                )
+               }
+              >
+                Copy
+              </Button>
+            </CopyToClipboard>
+          </TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+  )
+}
