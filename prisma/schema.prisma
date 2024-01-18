@@ -4,11 +4,12 @@
 generator client {
   provider = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]  
 }
 
 datasource db {
   provider = "sqlite"
-  url      =  env("DATABASE_URL")
+  url      =  "file:./dev.db"
 }
 
 model ShortenedUrl {
