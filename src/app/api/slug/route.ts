@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 
+export async function GET (request: Request) {
+  return NextResponse.json({ message: 'Hello World!' })
+}
+
 export async function POST (request: Request) {
   const { originalUrl, customSlug } = await request.json()
   const slugUrl = `/ss/${customSlug}`
@@ -13,7 +17,7 @@ export async function POST (request: Request) {
 
     if (existingSlug) {
       return NextResponse.json(
-        { message: 'Slug already exists' },
+        { message: 'Slug already exists.' },
         { status: 400 }
       )
     }
@@ -30,7 +34,7 @@ export async function POST (request: Request) {
         originalUrl,
         url: `${request.headers.get('x-forwarded-proto')}://${request.headers.get('host')}/ss/${customSlug}`,
         customSlug: slugUrl,
-        message: 'Slug created successfully'
+        message: 'Slug created successfully.'
       }
     )
   } catch (error) {
@@ -38,8 +42,13 @@ export async function POST (request: Request) {
       console.log(error.message)
       return NextResponse.json(
         { message: error.message },
-        { status: 400 }
+        { status: 500 }
       )
     }
+
+    return NextResponse.json(
+      { message: 'Something went wrong' },
+      { status: 500 }
+    )
   }
 }

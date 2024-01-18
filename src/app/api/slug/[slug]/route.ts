@@ -20,5 +20,10 @@ export async function GET (request: Request, { params }: { params: { slug: strin
         { status: 400 }
       )
     }
+
+    return NextResponse.json(
+      { message: 'Something went wrong.' },
+      { status: 500 }
+    )
   }
 }
