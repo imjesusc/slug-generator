@@ -20,7 +20,7 @@ export const SlugsTable: FC<SlugsTableProps> = ({ links }) => {
     <TableCaption>A list of your recent custom slugs.</TableCaption>
     <TableHeader>
       <TableRow>
-        <TableHead className="truncate max-w-[300px]">Custom url slug</TableHead>
+        <TableHead className="truncate w-[180px] max-w-[300px]">Custom url slug</TableHead>
         <TableHead className="truncate">Complete URL</TableHead>
       </TableRow>
     </TableHeader>
