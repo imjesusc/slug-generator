@@ -15,7 +15,6 @@ export async function middleware (request: NextRequest, ev: NextFetchEvent) {
   }
 
   const data: Data = await res.json()
-  console.log(data)
 
   if (data?.originalUrl) {
     return NextResponse.redirect(data.originalUrl)
@@ -23,5 +22,5 @@ export async function middleware (request: NextRequest, ev: NextFetchEvent) {
 }
 
 export const config = {
-  matcher: '/ss/:slug*'
+  matcher: ['/ss/:slug*']
 }
