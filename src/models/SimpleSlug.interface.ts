@@ -1,5 +1,8 @@
 export interface SimpleSlugInterface {
+  id?: number
   url: string
-  customSlug: string
-  originalUrl: string
+  slug: string
+  description: string
+  createdAt?: string
+  userId?: string
 }

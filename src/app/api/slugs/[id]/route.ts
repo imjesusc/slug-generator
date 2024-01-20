@@ -3,16 +3,21 @@ import { Prisma } from '@prisma/client'
 import { NextResponse } from 'next/server'
 
 export async function GET (request: Request, { params }: { params: { id: string } }) {
+  const url = new URL(request.url)
+  const searchQuery = url.searchParams.get('search')
   const { id } = params
 
   if (!id) return NextResponse.json({ message: 'Something went wrong. Id not found' }, { status: 500 })
 
   try {
-    const userSlugs = await prisma.user.findUnique({
-      where: { id },
-      include: {
-        links: true
+    const userSlugs = await prisma.link.findMany({
+      where: {
+        userId: id,
+        slug: {
+          contains: searchQuery || ''
+        }
       }
+
     })
 
     if (userSlugs) return NextResponse.json({ message: 'User slugs successfully retrieved', userSlugs }, { status: 200 })

@@ -12,15 +12,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui'
 import { ScissorsIcon, MixerHorizontalIcon, CopyIcon } from '@radix-ui/react-icons'
-
-interface SimpleSlugInterface {
-  id?: number
-  url: string
-  slug: string
-  description: string
-  createdAt?: string
-  userId?: string
-}
+import { type SimpleSlugInterface } from '@/models'
 
 export default function SlugCard ({ url, slug, description }: SimpleSlugInterface) {
   return (
