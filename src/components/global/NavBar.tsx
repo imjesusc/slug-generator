@@ -1,12 +1,10 @@
 'use client'
 
-import React from 'react'
 import { Button } from '../ui'
 import { GitHubLogoIcon } from '@radix-ui/react-icons'
 import { signIn, useSession } from 'next-auth/react'
 import { UserNav } from '../molecules/UserNav'
 import { type UserNavProps } from '@/models/UserNav.interface'
-import Link from 'next/link'
 
 export function NavBar () {
   const { data, status } = useSession()
@@ -34,7 +32,7 @@ export function NavBar () {
     <header className='w-screen grid place-content-center h-16'>
       <nav className='flex w-screen container justify-between'>
         <div className='flex items-center gap-2'>
-          <Link href={'/dashboard'} className='text-base font-medium'>Slug Generator</Link>
+                <p className='text-base font-medium'>Slug Generator</p>
         </div>
         <div>
          {status === 'authenticated' && (

@@ -11,9 +11,8 @@ import { type SimpleSlugInterface, type SlugsTableProps } from '@/models'
 import Link from 'next/link'
 import { type FC } from 'react'
 import { Button } from '../ui'
-import { CopyToClipboard } from 'react-copy-to-clipboard'
-import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
+import { copyToClipboard } from '@/utils/copyToClipboard'
 export const SlugsTable: FC<SlugsTableProps> = ({ links }) => {
   return (
     <Table className="w-full overflow-hidden">
@@ -42,19 +41,13 @@ export const SlugsTable: FC<SlugsTableProps> = ({ links }) => {
             {link.originalUrl}
           </TableCell>
           <TableCell className="grid justify-end">
-            <CopyToClipboard text={link.url}>
             <Button
               className={cn(index === 0 && 'bg-[#adfa1d] hover:bg-[#adfa1d] hover:opacity-80')}
               variant="outline"
-              onClick={() =>
-                toast.success(
-                  `Copied ${link.customSlug} custom slug to clipboard`
-                )
-               }
+              onClick={async () => { await copyToClipboard(`${link.url}`) }}
               >
                 Copy
               </Button>
-            </CopyToClipboard>
           </TableCell>
         </TableRow>
       ))}
