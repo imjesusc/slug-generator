@@ -12,9 +12,9 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui'
 import { ScissorsIcon, MixerHorizontalIcon, CopyIcon } from '@radix-ui/react-icons'
-import { type SimpleSlugInterface } from '@/models'
+import { type CustomSlugInterface } from '@/models/custom-slug.interface'
 
-export default function SlugCard ({ url, slug, description }: SimpleSlugInterface) {
+export default function SlugCard ({ url, slug, description }: CustomSlugInterface) {
   return (
     <Card>
       <CardHeader className="flex justify-between">

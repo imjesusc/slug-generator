@@ -1,5 +1,6 @@
-import { type SimpleSlugInterface } from '@/models'
 import SlugCard from '../molecules/SlugCard'
+import { ControlsForm } from '../molecules'
+import { type CustomSlugInterface } from '@/models/custom-slug.interface'
 
 const getSlugsData = async (userId: string, query?: string) => {
   const res = await fetch(`http://localhost:3000/api/slugs/${userId}?search=${query}`)
@@ -13,14 +14,17 @@ export const GroupSlugsCard = async ({ search }: { search: string }) => {
 
   return (
 
-     <div className='grid grid-cols-3 gap-4'>
+     <div className='grid tablet:grid-cols-3 gap-4'>
      {slugsData?.length > 0
        ? (
-           slugsData?.map((slug: SimpleSlugInterface) => (
+           slugsData?.map((slug: CustomSlugInterface) => (
             <SlugCard key={slug.id} url={slug.url} slug={slug.slug} description={slug.description} />
            ))
          )
-       : <p className='col-span-3 text-center'>No slugs found</p>}
+       : <div className='col-span-3 gap-5  grid place-content-center text-center my-10'>
+            <ControlsForm />
+            <p className='text-sm'>No slugs found</p>
+        </div>}
     </div>
   )
 }
