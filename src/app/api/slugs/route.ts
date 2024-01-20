@@ -18,7 +18,12 @@ export async function POST (request: Request) {
       }
     })
 
-    if (existingSlug) return NextResponse.json({ message: 'Slug already exists.' })
+    if (existingSlug) {
+      return NextResponse.json(
+        { message: 'Slug already exists.' },
+        { status: 400 }
+      )
+    }
 
     const createdSlug = await prisma.link.create({
       data: {
