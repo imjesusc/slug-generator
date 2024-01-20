@@ -4,6 +4,7 @@ import { Input } from '@/components/ui'
 import { useDebounce } from '@/utils/debounce'
 import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
+import { ControlsForm } from '.'
 
 export default function FilterInput () {
   const router = useRouter()
@@ -28,8 +29,9 @@ export default function FilterInput () {
   }, [debouncedValue])
 
   return (
-    <div>
+    <div className='flex gap-2'>
       <Input placeholder='Search' id="search" name="search" onChange={(e) => { setInputValue(e.target.value) }} />
+      <ControlsForm action='Create' variant='primary' />
     </div>
   )
 }

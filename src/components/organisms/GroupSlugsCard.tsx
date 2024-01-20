@@ -3,7 +3,7 @@ import { ControlsForm } from '../molecules'
 import { type CustomSlugInterface } from '@/models/custom-slug.interface'
 
 const getSlugsData = async (userId: string, query?: string) => {
-  const res = await fetch(`http://localhost:3000/api/slugs/${userId}?search=${query}`)
+  const res = await fetch(`http://localhost:3000/api/slugs/${userId}?search=${query}`, { next: { revalidate: 200 } })
   const data = await res.json()
 
   return data.userSlugs
@@ -22,7 +22,7 @@ export const GroupSlugsCard = async ({ search }: { search: string }) => {
            ))
          )
        : <div className='col-span-3 gap-5  grid place-content-center text-center my-10'>
-            <ControlsForm />
+            {slugsData?.length < 0 && <ControlsForm action='Create' variant='primary' />}
             <p className='text-sm'>No slugs found</p>
         </div>}
     </div>
