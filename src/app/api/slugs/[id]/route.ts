@@ -15,7 +15,7 @@ export async function GET (request: Request, { params }: { params: { id: string 
       }
     })
 
-    if (userSlugs) return NextResponse.json({ message: 'User slugs successfully retrieved' }, { status: 200 })
+    if (userSlugs) return NextResponse.json({ message: 'User slugs successfully retrieved', userSlugs }, { status: 200 })
 
     return NextResponse.json({ message: 'Something went wrong.' }, { status: 500 })
   } catch (error) {
