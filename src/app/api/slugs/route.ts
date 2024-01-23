@@ -30,7 +30,8 @@ export async function POST (request: Request) {
         url,
         slug,
         description,
-        userId
+        userId,
+        shortUrl: `${request.headers.get('x-forwarded-proto')}://${request.headers.get('host')}/${slug}`
       }
     })
 
@@ -72,7 +73,8 @@ export async function PUT (request: Request) {
         url,
         slug,
         description,
-        userId
+        userId,
+        shortUrl: `${request.headers.get('x-forwarded-proto')}://${request.headers.get('host')}/${slug}`
       }
     })
 
