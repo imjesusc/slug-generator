@@ -21,7 +21,6 @@ import { type ReactNode, useState } from 'react'
 import { Textarea } from '../ui/textarea'
 import { toast } from 'sonner'
 import { useSession } from 'next-auth/react'
-import { UpdateIcon } from '@radix-ui/react-icons'
 import { type ControlsFormProps } from '@/models'
 import { controlsFormData } from '@/lib/validations'
 
@@ -89,7 +88,7 @@ export function ControlsForm ({ action, slugData, variant, children }: ControlsF
       }
 
       try {
-        const res = await fetch('http://localhost:3000/api/slugs', OPTIONS)
+        const res = await fetch('/api/slugs', OPTIONS)
 
         if (!res.ok) {
           const errorData = await res.json()
@@ -166,8 +165,8 @@ export function ControlsForm ({ action, slugData, variant, children }: ControlsF
         />
 
         <div >
-          <Button variant={variant ?? 'default'} className="w-full">
-            {isLoading ? <span><UpdateIcon className="animate-spin" /></span> : <span>{action ?? 'Confirm'}</span> }
+          <Button variant={variant ?? 'default'} className="w-full text-foreground bg-[#adfa1d] hover:bg-[#adfa1d]/70">
+            {isLoading ? <span className='animate-pulse'>...</span> : <span>{action ?? 'Confirm'}</span> }
           </Button>
         </div>
       </form>

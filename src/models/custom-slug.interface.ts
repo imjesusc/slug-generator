@@ -5,4 +5,5 @@ export interface CustomSlugInterface {
   description: string
   createdAt?: string
   userId?: string
+  shortUrl?: string
 }

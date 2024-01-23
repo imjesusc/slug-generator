@@ -17,6 +17,7 @@ import { toast } from 'sonner'
 import { type ReactNode } from 'react'
 import { ControlsForm } from '.'
 import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 const handleDelete = async (userId: string | undefined, slugId: number | undefined) => {
   const res = await fetch(`/api/slugs?userId=${userId}&slugId=${slugId}`, {
     method: 'DELETE',
@@ -35,16 +36,19 @@ const handleDelete = async (userId: string | undefined, slugId: number | undefin
   toast.success('Custom slug deleted!')
 }
 
-export default function SlugCard ({ id, url, slug, description }: CustomSlugInterface) {
+export default function SlugCard ({ id, url, shortUrl, slug, description }: CustomSlugInterface) {
   const { data } = useSession()
+
   return (
     <Card className='hover:bg-accent transition-colors'>
       <CardHeader className='flex justify-between'>
         <div className='flex justify-between gap-4'>
           <div className='grid gap-1'>
-            <div className='flex items-center gap-2'>
-              <CardTitle>{slug}</CardTitle><CopyIcon className='w-4 h-4 cursor-pointer  active:scale-105' onClick={async () => {
-                await copyToClipboard(`http://localhost:3000/cs/${slug}`)
+            <div className='flex items-center gap-3'>
+              <Link href={shortUrl ?? ''} target='_blank' rel='noopener noreferrer'><CardTitle>{slug}</CardTitle></Link>
+              <CopyIcon className='w-4 h-4 cursor-pointer text-muted-foreground hover:text-accent-foreground   active:scale-105'
+              onClick={async () => {
+                await copyToClipboard(shortUrl ?? '')
               }} />
             </div>
             <CardDescription className='truncate'>{url}</CardDescription>
@@ -60,7 +64,7 @@ export default function SlugCard ({ id, url, slug, description }: CustomSlugInte
               <DropdownMenuGroup className='font-sans'>
                 <DropdownMenuItem
                   onClick={async () => {
-                    await copyToClipboard(`http://localhost:3000/cs/${slug}`)
+                    await copyToClipboard(shortUrl ?? '')
                   }}
                   className='cursor-pointer'
                 >
