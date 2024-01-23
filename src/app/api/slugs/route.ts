@@ -3,7 +3,40 @@ import { Prisma } from '@prisma/client'
 import { NextResponse } from 'next/server'
 
 export async function GET (request: Request) {
-  return NextResponse.json({ message: 'Hello World from slugs!' })
+  const url = new URL(request.url)
+  const searchQuery = url.searchParams.get('search')
+  const userId = url.searchParams.get('userId')
+
+  if (!userId) return NextResponse.json({ message: 'Something went wrong. Id not found' }, { status: 500 })
+
+  try {
+    const userSlugs = await prisma.link.findMany({
+      where: {
+        userId,
+        slug: {
+          contains: searchQuery || ''
+        }
+      }
+
+    })
+
+    if (userSlugs) return NextResponse.json({ message: 'User slugs successfully retrieved', userSlugs }, { status: 200 })
+
+    return NextResponse.json({ message: 'Something went wrong.' }, { status: 500 })
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      console.log(error.message)
+      return NextResponse.json(
+        { message: error.message },
+        { status: 500 }
+      )
+    }
+
+    return NextResponse.json(
+      { message: 'Something went wrong.' },
+      { status: 500 }
+    )
+  }
 }
 
 export async function POST (request: Request) {
