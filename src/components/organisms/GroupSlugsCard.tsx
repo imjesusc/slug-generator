@@ -1,16 +1,18 @@
+import { getServerSession } from 'next-auth'
 import SlugCard from '../molecules/SlugCard'
-import { ControlsForm } from '../molecules'
 import { type CustomSlugInterface } from '@/models/custom-slug.interface'
+import { authOptions } from '@/lib/authOptions'
 
 const getSlugsData = async (userId: string, query?: string) => {
-  const res = await fetch(`http://localhost:3000/api/slugs/${userId}?search=${query}`, { next: { revalidate: 200 } })
-  const data = await res.json()
-
-  return data.userSlugs
+  const res = await fetch(`http://localhost:3000/api/slugs/${userId}?search=${query}`)
+  const resData = await res.json()
+  return resData.userSlugs
 }
 
 export const GroupSlugsCard = async ({ search }: { search: string }) => {
-  const slugsData = await getSlugsData('clrl44ii600009gdyydzvvham', search)
+  const session = await getServerSession(authOptions)
+  if (!session?.userId) return
+  const slugsData = await getSlugsData(session?.userId, search)
 
   return (
 
@@ -18,12 +20,11 @@ export const GroupSlugsCard = async ({ search }: { search: string }) => {
      {slugsData?.length > 0
        ? (
            slugsData?.map((slug: CustomSlugInterface) => (
-            <SlugCard key={slug.id} url={slug.url} slug={slug.slug} description={slug.description} />
+            <SlugCard key={slug.id} id={slug.id} url={slug.url} slug={slug.slug} description={slug.description} />
            ))
          )
        : <div className='col-span-3 gap-5  grid place-content-center text-center my-10'>
-            {slugsData?.length < 0 && <ControlsForm action='Create' variant='primary' />}
-            <p className='text-sm'>No slugs found</p>
+            <p className='text-sm'>No slugs found. Create a new one.</p>
         </div>}
     </div>
   )
