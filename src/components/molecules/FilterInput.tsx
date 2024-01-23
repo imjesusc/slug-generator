@@ -1,6 +1,6 @@
 'use client'
 
-import { Input } from '@/components/ui'
+import { Button, Input } from '@/components/ui'
 import { useDebounce } from '@/utils/debounce'
 import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
@@ -21,8 +21,8 @@ export default function FilterInput () {
     [searchParams]
   )
 
-  const [inputValue, setInputValue] = useState<string>('')
-  const debouncedValue = useDebounce(inputValue, 300)
+  const [filterValue, setFilterValue] = useState<string>(searchParams.get('search') ?? '')
+  const debouncedValue = useDebounce(filterValue, 300)
 
   useEffect(() => {
     router.push(`${pathname}?${createQueryString('search', debouncedValue)}`)
@@ -30,8 +30,10 @@ export default function FilterInput () {
 
   return (
     <div className='flex gap-2'>
-      <Input placeholder='Search' id="search" name="search" onChange={(e) => { setInputValue(e.target.value) }} />
-      <ControlsForm action='Create' variant='primary' />
+      <Input placeholder='Search' value={filterValue} id="search" name="search" onChange={(e) => { setFilterValue(e.target.value) }} />
+      <ControlsForm action='Create'>
+        <Button variant='outline'>Create</Button>
+      </ControlsForm>
     </div>
   )
 }
