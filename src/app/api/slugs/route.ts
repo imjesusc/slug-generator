@@ -86,3 +86,41 @@ export async function PUT (request: Request) {
     return NextResponse.json({ message: 'Something went wrong' }, { status: 500 })
   }
 }
+
+export async function DELETE (request: Request) {
+  const url = new URL(request.url)
+  const userId = url.searchParams.get('userId')
+  const slugId = url.searchParams.get('slugId')
+
+  if (!userId || !slugId) {
+    return NextResponse.json({ message: 'Invalid userId or link id.' }, { status: 400 })
+  }
+
+  const existingLink = await prisma.link.findUnique({
+    where: {
+      userId,
+      id: Number(slugId)
+    }
+  })
+
+  if (!existingLink) {
+    return NextResponse.json({ message: 'Link not found.' }, { status: 404 })
+  }
+
+  try {
+    const deletedLink = await prisma.link.delete({
+      where: {
+        userId,
+        id: Number(slugId)
+      }
+    })
+    return NextResponse.json({ message: 'Link deleted successfully.', deletedLink }, { status: 200 })
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      console.log(error.message)
+      return NextResponse.json({ message: error.message }, { status: 500 })
+    }
+
+    return NextResponse.json({ message: 'Something went wrong.' }, { status: 500 })
+  }
+}
