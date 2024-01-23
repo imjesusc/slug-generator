@@ -16,63 +16,103 @@ import {
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { type z } from 'zod'
 import { type ReactNode, useState } from 'react'
 import { Textarea } from '../ui/textarea'
 import { toast } from 'sonner'
+import { useSession } from 'next-auth/react'
+import { UpdateIcon } from '@radix-ui/react-icons'
+import { type ControlsFormProps } from '@/models'
+import { controlsFormData } from '@/lib/validations'
 
-const controlsFormData = z.object({
-  url: z.string().refine((url) => /^(https?|ssh):\/\/[^\s/$.?#].[^\s]*$/.test(url)),
-  slug: z.string().refine((value) => /^[a-zA-Z0-9_.-]+$/.test(value)),
-  description: z.string(),
-  userId: z.string()
-})
-
-export function ControlsForm ({ action, variant }: { action: string, variant: any }) {
+export function ControlsForm ({ action, slugData, variant, children }: ControlsFormProps) {
   const [isLoading, setIsLoading] = useState(false)
-  const [status, setStatus] = useState(true)
+  const { data } = useSession()
+
+  const [status, setStatus] = useState(false)
   const form = useForm<z.infer<typeof controlsFormData>>({
     resolver: zodResolver(controlsFormData),
     defaultValues: {
-      url: '',
-      slug: '',
-      description: '',
-      userId: 'clrl44ii600009gdyydzvvham'
+      url: slugData?.url ?? '',
+      slug: slugData?.slug ?? '',
+      description: slugData?.description ?? '',
+      userId: data?.userId
     }
   })
 
-  const onSubmit = async (data: z.infer<typeof controlsFormData>) => {
-    setIsLoading(true)
-    const OPTIONS = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    }
-    try {
-      const response = await fetch('/api/slugs', OPTIONS)
-      const data = await response.json()
+  const onSubmit = async (dataToSend: z.infer<typeof controlsFormData>) => {
+    if (action === 'Create') {
+      setIsLoading(true)
+      const OPTIONS = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dataToSend)
+      }
+      try {
+        const response = await fetch('/api/slugs', OPTIONS)
+        const data = await response.json()
 
-      if (!response.ok) {
-        toast.error(data.message as ReactNode)
-        return
+        if (!response.ok) {
+          toast.error(data.message as ReactNode)
+          return
+        }
+
+        setStatus(false)
+        form.reset()
+        toast.success('Custom slug created!')
+      } catch (error) {
+        if (error instanceof Error) {
+          return error.message
+        }
+      } finally {
+        setIsLoading(false)
+      }
+    } else {
+      setIsLoading(true)
+
+      const putData = {
+        url: dataToSend.url,
+        slug: dataToSend.slug,
+        description: dataToSend.description,
+        userId: data?.userId,
+        id: slugData.id
       }
 
-      setStatus(false)
-      form.reset()
-    } catch (error) {
-      if (error instanceof Error) {
-        return error.message
+      const OPTIONS = {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(putData)
       }
-    } finally {
-      setIsLoading(false)
+
+      try {
+        const res = await fetch('http://localhost:3000/api/slugs', OPTIONS)
+
+        if (!res.ok) {
+          const errorData = await res.json()
+          toast.error(errorData.message as ReactNode)
+          return
+        }
+
+        toast.success('Custom slug updated!')
+        setStatus(false)
+        form.reset()
+      } catch (error) {
+        if (error instanceof Error) {
+          return error.message
+        }
+      } finally {
+        setIsLoading(false)
+      }
     }
   }
   return (
     <Dialog open={status} onOpenChange={setStatus}>
       <DialogTrigger asChild>
-        <Button variant="outline">{action ?? 'Action'} slug</Button>
+        {children}
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[425px]">
@@ -116,7 +156,7 @@ export function ControlsForm ({ action, variant }: { action: string, variant: an
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Custom slug</FormLabel>
+              <FormLabel>Description</FormLabel>
               <FormControl>
                 <Textarea className='max-h-[130px]' placeholder="This custom slug is for my page..." {...field} />
               </FormControl>
@@ -127,7 +167,7 @@ export function ControlsForm ({ action, variant }: { action: string, variant: an
 
         <div >
           <Button variant={variant ?? 'default'} className="w-full">
-            {isLoading ? 'Creating...' : <span>{action ?? 'Confirm'}</span> }
+            {isLoading ? <span><UpdateIcon className="animate-spin" /></span> : <span>{action ?? 'Confirm'}</span> }
           </Button>
         </div>
       </form>

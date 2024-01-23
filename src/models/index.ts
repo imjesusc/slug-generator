@@ -1,2 +1,5 @@
 export * from './SimpleSlug.interface'
 export * from './SlugsTable.interface'
+export * from './UserNav.interface'
+export * from './controls-form.interface'
+export * from './custom-slug.interface'
