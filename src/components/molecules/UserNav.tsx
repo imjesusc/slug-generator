@@ -14,6 +14,7 @@ import { UserCog } from 'lucide-react'
 import Link from 'next/link'
 import { type FC } from 'react'
 import { signOut } from 'next-auth/react'
+import { ControlsForm } from '.'
 
 export const UserNav: FC<UserNavProps> = ({ user }) => {
   const handleSignOut = () => {
@@ -38,10 +39,11 @@ export const UserNav: FC<UserNavProps> = ({ user }) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuGroup className='font-sans'>
-          <DropdownMenuItem className='cursor-pointer'>
-            Create a new link
-            <DropdownMenuShortcut><PlusIcon /></DropdownMenuShortcut>
-          </DropdownMenuItem>
+          <ControlsForm
+               action='Create'
+               >
+                <div className="relative flex hover:bg-accent items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground  cursor-pointer">Create a new link<span className="ml-auto text-xs tracking-widest opacity-60"><PlusIcon /></span></div>
+               </ControlsForm>
             <Link target='_blank' href={'https://github.com/imjesusc/slug-generator/issues/new'}>
               <DropdownMenuItem className='cursor-pointer'>
                 Report a bug
