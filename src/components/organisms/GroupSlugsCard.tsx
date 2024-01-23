@@ -4,7 +4,7 @@ import { type CustomSlugInterface } from '@/models/custom-slug.interface'
 import { authOptions } from '@/lib/authOptions'
 
 const getSlugsData = async (userId: string, query?: string) => {
-  const res = await fetch(`http://localhost:3000/api/slugs/${userId}?search=${query}`)
+  const res = await fetch(`http://localhost:3000/api/slugs?userId=${userId}&search=${query}`)
   const resData = await res.json()
   return resData.userSlugs
 }
@@ -13,8 +13,6 @@ export const GroupSlugsCard = async ({ search }: { search: string }) => {
   const session = await getServerSession(authOptions)
   if (!session?.userId) return
   const slugsData = await getSlugsData(session?.userId, search)
-
-  console.log(slugsData)
 
   return (
 
