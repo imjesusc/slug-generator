@@ -13,8 +13,30 @@ import {
 } from '@/components/ui'
 import { ScissorsIcon, MixerHorizontalIcon, CopyIcon } from '@radix-ui/react-icons'
 import { type CustomSlugInterface } from '@/models/custom-slug.interface'
+import { toast } from 'sonner'
+import { type ReactNode } from 'react'
+import { ControlsForm } from '.'
+import { useSession } from 'next-auth/react'
+const handleDelete = async (userId: string | undefined, slugId: number | undefined) => {
+  const res = await fetch(`/api/slugs?userId=${userId}&slugId=${slugId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
 
-export default function SlugCard ({ url, slug, description }: CustomSlugInterface) {
+  if (!res.ok) {
+    const errorData = await res.json()
+    toast.error(errorData.message as ReactNode)
+    console.log(errorData)
+    return
+  }
+
+  toast.success('Custom slug deleted!')
+}
+
+export default function SlugCard ({ id, url, slug, description }: CustomSlugInterface) {
+  const { data } = useSession()
   return (
     <Card>
       <CardHeader className="flex justify-between">
@@ -36,11 +58,14 @@ export default function SlugCard ({ url, slug, description }: CustomSlugInterfac
                 Copy
                 <DropdownMenuShortcut><CopyIcon /></DropdownMenuShortcut>
               </DropdownMenuItem>
-              <DropdownMenuItem className='cursor-pointer'>
-                Edit
-                <DropdownMenuShortcut><MixerHorizontalIcon /></DropdownMenuShortcut>
-              </DropdownMenuItem>
-              <DropdownMenuItem className='cursor-pointer'>
+              <ControlsForm
+              slugData={{ url, id, slug, description }}
+               action='Update'
+               >
+                <div className="relative flex hover:bg-accent items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground  cursor-pointer">Edit<span className="ml-auto text-xs tracking-widest opacity-60"><MixerHorizontalIcon /></span></div>
+               </ControlsForm>
+
+              <DropdownMenuItem className='cursor-pointer' onClick={async () => { await handleDelete(data?.userId, id) }}>
                 Delete
                 <DropdownMenuShortcut><ScissorsIcon /></DropdownMenuShortcut>
               </DropdownMenuItem>
