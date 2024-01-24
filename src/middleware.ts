@@ -11,7 +11,7 @@ interface DataSimpleSlug {
 }
 export async function middleware (request: NextRequest, ev: NextFetchEvent) {
   const { pathname } = request.nextUrl
-  const baseUrl = request.nextUrl.origin
+  const baseUrl = process.env.NEXTAUTH_URL
   const customSlug = pathname.split('/').pop()
 
   // Fetching Custom Shortened Url

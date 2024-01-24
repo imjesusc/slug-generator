@@ -4,7 +4,7 @@ import { type CustomSlugInterface } from '@/models/custom-slug.interface'
 import { authOptions } from '@/lib/authOptions'
 
 const getSlugsData = async (userId: string, query?: string) => {
-  const res = await fetch(`http://localhost:3000/api/slugs?userId=${userId}&search=${query}`)
+  const res = await fetch(`${process.env.NEXTAUTH_URL}/api/slugs?userId=${userId}&search=${query}`)
   const resData = await res.json()
   return resData.userSlugs
 }
