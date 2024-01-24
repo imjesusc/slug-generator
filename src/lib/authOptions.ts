@@ -7,10 +7,11 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as any,
   providers: [
     GithubProvider({
-      clientId: `${process.env.GITHUB_CLIENT_ID}`,
-      clientSecret: `${process.env.GITHUB_SECRET}`
+      clientId: process.env.ENV_GITHUB_CLIENT_ID ?? '',
+      clientSecret: process.env.ENV_GITHUB_SECRET ?? ''
     })
   ],
+  secret: process.env.NEXTAUTH_SECRET ?? '',
   callbacks: {
     async session ({ session, user }) {
       return await Promise.resolve({

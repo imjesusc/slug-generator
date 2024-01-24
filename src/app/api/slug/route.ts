@@ -7,7 +7,6 @@ export async function GET (request: Request) {
   const customSlug = url.searchParams.get('slug')
 
   if (!customSlug) return NextResponse.json({ message: 'Something went wrong. Slug not found' }, { status: 500 })
-
   try {
     const getSimpleSlug = await prisma.simpleShortenedUrl.findUnique({
       where: {
@@ -15,7 +14,7 @@ export async function GET (request: Request) {
       }
     })
 
-    return NextResponse.json(getSimpleSlug)
+    return NextResponse.json({ message: 'User slugs successfully retrieved', getSimpleSlug }, { status: 200 })
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       console.log(error.message)

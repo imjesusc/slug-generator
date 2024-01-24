@@ -5,7 +5,6 @@ import { NextResponse } from 'next/server'
 export async function GET (request: Request, { params }: { params: { slug: string } }) {
   const { slug } = params
   if (!slug) return NextResponse.json({ message: 'Something went wrong. Id not found' }, { status: 500 })
-
   try {
     const userSlug = await prisma.link.findFirst({
       where: {
@@ -13,9 +12,7 @@ export async function GET (request: Request, { params }: { params: { slug: strin
       }
     })
 
-    if (userSlug) return NextResponse.json({ message: 'User slugs successfully retrieved', userSlug }, { status: 200 })
-
-    return NextResponse.json({ message: 'Something went wrong.' }, { status: 500 })
+    return NextResponse.json({ message: 'User slugs successfully retrieved', userSlug }, { status: 200 })
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       console.log(error.message)

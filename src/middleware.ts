@@ -1,38 +1,45 @@
-import { NextResponse, type NextFetchEvent, type NextRequest } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 
-interface DataCustomSlug {
-  userSlug: {
-    url: string
-  }
-}
-
-interface DataSimpleSlug {
-  originalUrl: string
-}
-export async function middleware (request: NextRequest, ev: NextFetchEvent) {
+export async function middleware (request: NextRequest) {
   const { pathname } = request.nextUrl
-  const baseUrl = process.env.NEXTAUTH_URL
+  if (pathname === '/') {
+    return NextResponse.next()
+  }
+
+  const baseUrl = request.nextUrl.origin
   const customSlug = pathname.split('/').pop()
 
-  // Fetching Custom Shortened Url
-  const resCustomSlug = await fetch(`${baseUrl}/api/slugs/${customSlug}`)
-  const dataCustomSlug: DataCustomSlug = await resCustomSlug?.json()
+  try {
+    // Fetching Custom Shortened Url
+    const resCustomSlug = await fetch(`${baseUrl}/api/slugs/${customSlug}`)
+    const dataCustomSlug = await resCustomSlug.json()
 
-  // Fetching Simple Shortened Url
-  const resSimpleSlug = await fetch(`${baseUrl}/api/slug?slug=${customSlug}`)
-  const dataSimpleSlug: DataSimpleSlug = await resSimpleSlug?.json()
-
-  // Custom Shortened Url
-  if (dataCustomSlug?.userSlug?.url) {
-    return NextResponse.redirect(dataCustomSlug?.userSlug?.url)
+    // Custom Shortened Url
+    if (dataCustomSlug?.userSlug?.url) {
+      return NextResponse.redirect(new URL(dataCustomSlug.userSlug.url as string))
+    }
+  } catch (error) {
+    console.error('Error fetching custom slug:', error)
   }
 
-  // Simple Shortened Url
-  if (dataSimpleSlug?.originalUrl) {
-    return NextResponse.redirect(dataSimpleSlug?.originalUrl)
+  try {
+    // Fetching Simple Shortened Url
+    const resSimpleSlug = await fetch(`${baseUrl}/api/slug?slug=${customSlug}`)
+    const dataSimpleSlug = await resSimpleSlug.json()
+
+    // Simple Shortened Url
+    if (dataSimpleSlug?.getSimpleSlug?.originalUrl) {
+      return NextResponse.redirect(new URL(dataSimpleSlug.getSimpleSlug.originalUrl as string))
+    }
+  } catch (error) {
+    console.error('Error fetching simple slug:', error)
   }
+
+  // If no matching slug is found, return a 404 response
+  NextResponse.redirect(new URL('/404', request.url))
+  return NextResponse.json({ message: 'Slug not found' }, { status: 404 })
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|dashboard).*)']
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|favicon-16x16.png|dashboard).*)']
 }
