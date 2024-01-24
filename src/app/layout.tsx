@@ -4,6 +4,8 @@ import '../styles/globals.css'
 import React from 'react'
 import { Toaster } from '@/components/ui'
 
+import { NavBar } from '@/components/global'
+import { AuthProvider, AuthWrapper } from './Providers'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -15,18 +17,22 @@ export const metadata: Metadata = {
     apple: '/apple-touch-icon.png'
   }
 }
-
-export default function RootLayout ({
+export default async function RootLayout ({
   children
 }: {
   children: React.ReactNode
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        {children}
-        <Toaster />
-      </body>
+        <body className={inter.className}>
+          <AuthProvider>
+            <AuthWrapper>
+              <NavBar/>
+              {children}
+            </AuthWrapper>
+            <Toaster />
+          </AuthProvider>
+        </body>
     </html>
   )
 }

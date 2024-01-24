@@ -4,20 +4,24 @@ import { NextResponse } from 'next/server'
 
 export async function GET (request: Request, { params }: { params: { slug: string } }) {
   const { slug } = params
-  const slugUrl = `/ss/${slug}`
+  if (!slug) return NextResponse.json({ message: 'Something went wrong. Id not found' }, { status: 500 })
 
   try {
-    const getSimpleSlug = await prisma.simpleShortenedUrl.findUnique({
-      where: { customSlug: slugUrl }
+    const userSlug = await prisma.link.findFirst({
+      where: {
+        slug
+      }
     })
 
-    return NextResponse.json(getSimpleSlug)
+    if (userSlug) return NextResponse.json({ message: 'User slugs successfully retrieved', userSlug }, { status: 200 })
+
+    return NextResponse.json({ message: 'Something went wrong.' }, { status: 500 })
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       console.log(error.message)
       return NextResponse.json(
         { message: error.message },
-        { status: 400 }
+        { status: 500 }
       )
     }
 
