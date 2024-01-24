@@ -1,26 +1,38 @@
-import { NextResponse } from 'next/server'
-import type { NextFetchEvent, NextRequest } from 'next/server'
+import { NextResponse, type NextFetchEvent, type NextRequest } from 'next/server'
 
-interface Data {
+interface DataCustomSlug {
+  userSlug: {
+    url: string
+  }
+}
+
+interface DataSimpleSlug {
   originalUrl: string
 }
 export async function middleware (request: NextRequest, ev: NextFetchEvent) {
-  const slug = request.nextUrl.pathname.split('/').pop()
-  const apiURL = request.nextUrl.origin
+  const { pathname } = request.nextUrl
+  const baseUrl = request.nextUrl.origin
+  const customSlug = pathname.split('/').pop()
 
-  const res = await fetch(`${apiURL}/api/slug/${slug}`, { mode: 'no-cors' })
+  // Fetching Custom Shortened Url
+  const resCustomSlug = await fetch(`${baseUrl}/api/slugs/${customSlug}`)
+  const dataCustomSlug: DataCustomSlug = await resCustomSlug?.json()
 
-  if (res.status === 404) {
-    return NextResponse.redirect(request.nextUrl.origin)
+  // Fetching Simple Shortened Url
+  const resSimpleSlug = await fetch(`${baseUrl}/api/slug?slug=${customSlug}`)
+  const dataSimpleSlug: DataSimpleSlug = await resSimpleSlug?.json()
+
+  // Custom Shortened Url
+  if (dataCustomSlug?.userSlug?.url) {
+    return NextResponse.redirect(dataCustomSlug?.userSlug?.url)
   }
 
-  const data: Data = await res.json()
-
-  if (data?.originalUrl) {
-    return NextResponse.redirect(data.originalUrl)
+  // Simple Shortened Url
+  if (dataSimpleSlug?.originalUrl) {
+    return NextResponse.redirect(dataSimpleSlug?.originalUrl)
   }
 }
 
 export const config = {
-  matcher: ['/ss/:slug*']
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|dashboard).*)']
 }
