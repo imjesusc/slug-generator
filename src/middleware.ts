@@ -6,6 +6,10 @@ export async function middleware (request: NextRequest) {
     return NextResponse.next()
   }
 
+  if (pathname.includes('/api')) {
+    return NextResponse.redirect('/')
+  }
+
   const baseUrl = request.nextUrl.origin
   const customSlug = pathname.split('/').pop()
 
@@ -36,10 +40,9 @@ export async function middleware (request: NextRequest) {
   }
 
   // If no matching slug is found, return a 404 response
-  NextResponse.redirect(new URL('/404', request.url))
-  return NextResponse.json({ message: 'Slug not found' }, { status: 404 })
+  return NextResponse.json('Slug not found', { status: 404 })
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|favicon-16x16.png|dashboard).*)']
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|favicon-16x16.png|dashboard|404).*)']
 }
