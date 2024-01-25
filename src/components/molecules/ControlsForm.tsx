@@ -23,10 +23,12 @@ import { toast } from 'sonner'
 import { useSession } from 'next-auth/react'
 import { type ControlsFormProps } from '@/models'
 import { controlsFormData } from '@/lib/validations'
+import { useRouter } from 'next/navigation'
 
 export function ControlsForm ({ action, slugData, variant, children }: ControlsFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const { data } = useSession()
+  const router = useRouter()
 
   const [status, setStatus] = useState(false)
   const form = useForm<z.infer<typeof controlsFormData>>({
@@ -58,6 +60,7 @@ export function ControlsForm ({ action, slugData, variant, children }: ControlsF
           return
         }
 
+        router.refresh()
         setStatus(false)
         form.reset()
         toast.success('Custom slug created!')
@@ -96,9 +99,9 @@ export function ControlsForm ({ action, slugData, variant, children }: ControlsF
           return
         }
 
+        router.refresh()
         toast.success('Custom slug updated!')
         setStatus(false)
-        form.reset()
       } catch (error) {
         if (error instanceof Error) {
           return error.message
@@ -110,67 +113,71 @@ export function ControlsForm ({ action, slugData, variant, children }: ControlsF
   }
   return (
     <Dialog open={status} onOpenChange={setStatus}>
-      <DialogTrigger asChild>
-        {children}
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
 
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className='sm:max-w-[425px]'>
         <DialogHeader>
           <DialogTitle>{action} Custom Slug</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit) as any}
-      className="grid gap-4 w-full">
-        <FormField
-          control={form.control}
-          name="url"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Enter url here</FormLabel>
-              <FormControl>
-                <Input type="text" placeholder="https://page-link-ds.vercel.app/eyJuYW1lIjoiSmaWFRlc3RCBl6biBlzWplc3BzOi8vZ2l0aHViLm" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <form onSubmit={form.handleSubmit(onSubmit) as any} className='grid gap-4 w-full'>
+            <FormField
+              control={form.control}
+              name='url'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Enter url here</FormLabel>
+                  <FormControl>
+                    <Input
+                      type='text'
+                      placeholder='https://page-link-ds.vercel.app/eyJuYW1lIjoiSmaWFRlc3RCBl6biBlzWplc3BzOi8vZ2l0aHViLm'
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <FormField
-          control={form.control}
-          name="slug"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Custom slug</FormLabel>
-              <FormControl>
-                <Input type="text" placeholder="page-link" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <FormField
+              control={form.control}
+              name='slug'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Custom slug</FormLabel>
+                  <FormControl>
+                    <Input type='text' placeholder='page-link' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Textarea className='max-h-[130px]' placeholder="This custom slug is for my page..." {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <FormField
+              control={form.control}
+              name='description'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea className='max-h-[130px]' placeholder='This custom slug is for my page...' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <div >
-          <Button variant={variant ?? 'default'} className="w-full text-foreground bg-[#adfa1d] hover:bg-[#adfa1d]/70">
-            {isLoading ? <span className='animate-pulse'>...</span> : <span>{action ?? 'Confirm'}</span> }
-          </Button>
-        </div>
-      </form>
-    </Form>
+            <div>
+              <Button
+                variant={variant ?? 'default'}
+                className='w-full text-foreground bg-[#adfa1d] hover:bg-[#adfa1d]/70'
+              >
+                {isLoading ? <span className='animate-pulse'>...</span> : <span>{action ?? 'Confirm'}</span>}
+              </Button>
+            </div>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   )

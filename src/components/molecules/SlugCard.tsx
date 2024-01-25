@@ -18,26 +18,29 @@ import { type ReactNode } from 'react'
 import { ControlsForm } from '.'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-const handleDelete = async (userId: string | undefined, slugId: number | undefined) => {
-  const res = await fetch(`/api/slugs?userId=${userId}&slugId=${slugId}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-
-  if (!res.ok) {
-    const errorData = await res.json()
-    toast.error(errorData.message as ReactNode)
-    console.log(errorData)
-    return
-  }
-
-  toast.success('Custom slug deleted!')
-}
+import { useRouter } from 'next/navigation'
 
 export default function SlugCard ({ id, url, shortUrl, slug, description }: CustomSlugInterface) {
   const { data } = useSession()
+  const router = useRouter()
+  const handleDelete = async (userId: string | undefined, slugId: number | undefined) => {
+    const res = await fetch(`/api/slugs?userId=${userId}&slugId=${slugId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    if (!res.ok) {
+      const errorData = await res.json()
+      toast.error(errorData.message as ReactNode)
+      console.log(errorData)
+      return
+    }
+
+    router.refresh()
+    toast.success('Custom slug deleted!')
+  }
 
   return (
     <Card className='hover:bg-accent transition-colors'>
@@ -45,18 +48,27 @@ export default function SlugCard ({ id, url, shortUrl, slug, description }: Cust
         <div className='flex justify-between gap-4'>
           <div className='grid gap-1'>
             <div className='flex items-center gap-3'>
-              <Link href={shortUrl ?? ''} target='_blank' rel='noopener noreferrer'><CardTitle>{slug}</CardTitle></Link>
-              <CopyIcon className='w-4 h-4 cursor-pointer text-muted-foreground hover:text-accent-foreground   active:scale-105'
-              onClick={async () => {
-                await copyToClipboard(shortUrl ?? '')
-              }} />
+              <Link
+                href={shortUrl ?? ''}
+                target='_blank'
+                className='hover:underline underline-offset-1'
+                rel='noopener noreferrer'
+              >
+                <CardTitle>{slug}</CardTitle>
+              </Link>
+              <CopyIcon
+                className='w-4 h-4 cursor-pointer text-muted-foreground hover:text-accent-foreground   active:scale-105'
+                onClick={async () => {
+                  await copyToClipboard(shortUrl ?? '')
+                }}
+              />
             </div>
             <CardDescription className='truncate'>{url}</CardDescription>
           </div>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button className='flex gap-2 h-10 ' variant='outline'>
+              <Button className='relative rounded-full ' variant='outline'>
                 Controls
               </Button>
             </DropdownMenuTrigger>

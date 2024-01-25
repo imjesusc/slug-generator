@@ -9,7 +9,7 @@ import { AuthProvider, AuthWrapper } from './Providers'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Custom slug generator',
+  title: 'Slug Generator - Open source custom slug generator',
   description: 'Open source custom slug generator—create unique and memorable slugs for any purpose.',
   icons: {
     icon: '/favicon.ico?v=1',
