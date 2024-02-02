@@ -11,7 +11,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  Form
+  Form,
 } from '@/components/ui'
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -25,7 +25,7 @@ import { type ControlsFormProps } from '@/models'
 import { controlsFormData } from '@/lib/validations'
 import { useRouter } from 'next/navigation'
 
-export function ControlsForm ({ action, slugData, variant, children }: ControlsFormProps) {
+export function ControlsForm({ action, slugData, variant, children }: ControlsFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const { data } = useSession()
   const router = useRouter()
@@ -37,8 +37,8 @@ export function ControlsForm ({ action, slugData, variant, children }: ControlsF
       url: slugData?.url ?? '',
       slug: slugData?.slug ?? '',
       description: slugData?.description ?? '',
-      userId: data?.userId
-    }
+      userId: data?.userId,
+    },
   })
 
   const onSubmit = async (dataToSend: z.infer<typeof controlsFormData>) => {
@@ -47,9 +47,9 @@ export function ControlsForm ({ action, slugData, variant, children }: ControlsF
       const OPTIONS = {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(dataToSend)
+        body: JSON.stringify(dataToSend),
       }
       try {
         const response = await fetch('/api/slugs', OPTIONS)
@@ -79,15 +79,15 @@ export function ControlsForm ({ action, slugData, variant, children }: ControlsF
         slug: dataToSend.slug,
         description: dataToSend.description,
         userId: data?.userId,
-        id: slugData.id
+        id: slugData.id,
       }
 
       const OPTIONS = {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(putData)
+        body: JSON.stringify(putData),
       }
 
       try {
@@ -115,23 +115,23 @@ export function ControlsForm ({ action, slugData, variant, children }: ControlsF
     <Dialog open={status} onOpenChange={setStatus}>
       <DialogTrigger asChild>{children}</DialogTrigger>
 
-      <DialogContent className='sm:max-w-[425px]'>
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{action} Custom Slug</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit) as any} className='grid gap-4 w-full'>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 w-full">
             <FormField
               control={form.control}
-              name='url'
+              name="url"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Enter url here</FormLabel>
                   <FormControl>
                     <Input
-                      type='text'
-                      placeholder='https://page-link-ds.vercel.app/eyJuYW1lIjoiSmaWFRlc3RCBl6biBlzWplc3BzOi8vZ2l0aHViLm'
+                      type="text"
+                      placeholder="https://page-link-ds.vercel.app/eyJuYW1lIjoiSmaWFRlc3RCBl6biBlzWplc3BzOi8vZ2l0aHViLm"
                       {...field}
                     />
                   </FormControl>
@@ -142,12 +142,12 @@ export function ControlsForm ({ action, slugData, variant, children }: ControlsF
 
             <FormField
               control={form.control}
-              name='slug'
+              name="slug"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Custom slug</FormLabel>
                   <FormControl>
-                    <Input type='text' placeholder='page-link' {...field} />
+                    <Input type="text" placeholder="page-link" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -156,12 +156,12 @@ export function ControlsForm ({ action, slugData, variant, children }: ControlsF
 
             <FormField
               control={form.control}
-              name='description'
+              name="description"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea className='max-h-[130px]' placeholder='This custom slug is for my page...' {...field} />
+                    <Textarea className="max-h-[130px]" placeholder="This custom slug is for my page..." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -171,9 +171,9 @@ export function ControlsForm ({ action, slugData, variant, children }: ControlsF
             <div>
               <Button
                 variant={variant ?? 'default'}
-                className='w-full text-foreground bg-[#adfa1d] hover:bg-[#adfa1d]/70'
+                className="w-full text-foreground bg-[#adfa1d] hover:bg-[#adfa1d]/70"
               >
-                {isLoading ? <span className='animate-pulse'>...</span> : <span>{action ?? 'Confirm'}</span>}
+                {isLoading ? <span className="animate-pulse">...</span> : <span>{action ?? 'Confirm'}</span>}
               </Button>
             </div>
           </form>

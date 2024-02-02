@@ -6,7 +6,7 @@ import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { ControlsForm } from '.'
 
-export default function FilterInput () {
+export default function FilterInput() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -18,7 +18,7 @@ export default function FilterInput () {
 
       return params.toString()
     },
-    [searchParams]
+    [searchParams],
   )
 
   const [filterValue, setFilterValue] = useState<string>(searchParams.get('search') ?? '')
@@ -29,10 +29,18 @@ export default function FilterInput () {
   }, [debouncedValue])
 
   return (
-    <div className='flex gap-2'>
-      <Input placeholder='Search' value={filterValue} id="search" name="search" onChange={(e) => { setFilterValue(e.target.value) }} />
-      <ControlsForm action='Create'>
-        <Button variant='outline'>Create</Button>
+    <div className="flex gap-2">
+      <Input
+        placeholder="Search"
+        value={filterValue}
+        id="search"
+        name="search"
+        onChange={(e) => {
+          setFilterValue(e.target.value)
+        }}
+      />
+      <ControlsForm action="Create">
+        <Button variant="outline">Create</Button>
       </ControlsForm>
     </div>
   )

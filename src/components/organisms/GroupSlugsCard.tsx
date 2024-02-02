@@ -15,22 +15,23 @@ export const GroupSlugsCard = async ({ search }: { search: string }) => {
   const slugsData = await getSlugsData(session?.userId, search)
 
   return (
-
-     <div className='grid tablet:grid-cols-3 gap-4'>
-     {slugsData?.length > 0
-       ? (
-           slugsData?.map((slug: CustomSlugInterface) => (
-            <SlugCard key={slug.id}
+    <div className="grid tablet:grid-cols-3 gap-4">
+      {slugsData?.length > 0 ? (
+        slugsData?.map((slug: CustomSlugInterface) => (
+          <SlugCard
+            key={slug.id}
             shortUrl={slug.shortUrl}
             id={slug.id}
             url={slug.url}
             slug={slug.slug}
-            description={slug.description} />
-           ))
-         )
-       : <div className='col-span-3 gap-5  grid place-content-center text-center my-10'>
-            <p className='text-sm'>No slugs found.</p>
-        </div>}
+            description={slug.description}
+          />
+        ))
+      ) : (
+        <div className="col-span-3 gap-5  grid place-content-center text-center my-10">
+          <p className="text-sm">No slugs found.</p>
+        </div>
+      )}
     </div>
   )
 }
