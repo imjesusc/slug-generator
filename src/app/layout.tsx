@@ -5,7 +5,7 @@ import React from 'react'
 import { Toaster } from '@/components/ui'
 
 import { NavBar } from '@/components/global'
-import { AuthProvider, AuthWrapper } from './Providers'
+import { AuthProvider } from './Providers'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -14,25 +14,19 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.ico?v=1',
     shortcut: '/favicon-16x16.png',
-    apple: '/apple-touch-icon.png'
-  }
+    apple: '/apple-touch-icon.png',
+  },
 }
-export default async function RootLayout ({
-  children
-}: {
-  children: React.ReactNode
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-        <body className={inter.className}>
-          <AuthProvider>
-            <AuthWrapper>
-              <NavBar/>
-              {children}
-            </AuthWrapper>
-            <Toaster />
-          </AuthProvider>
-        </body>
+      <body className={inter.className}>
+        <AuthProvider>
+          <NavBar />
+          {children}
+          <Toaster />
+        </AuthProvider>
+      </body>
     </html>
   )
 }
