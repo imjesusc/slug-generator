@@ -1,42 +1,17 @@
 {
-    "env": {
-        "browser": true,
-        "es2021": true
-    },
     "extends": [
-        "standard-with-typescript",
-        "plugin:react/recommended",
-        "plugin:@next/next/recommended"
-    ],
-    "settings": {
-        "react": {
-            "version": "detect"
-        }
-    },    
-    "parserOptions": {
-        "ecmaVersion": "latest",
-        "sourceType": "module"
-    },
-    "plugins": [
-        "react"
+      "plugin:@next/next/recommended",
+      "@rocketseat/eslint-config/next"
     ],
     "rules": {
-        "react/react-in-jsx-scope": "off",
-        "react/prop-types": "off",
-        "@typescript-eslint/explicit-function-return-type": "off",
-        "@typescript-eslint/strict-boolean-expressions": "off"  ,
-        "@typescript-eslint/consistent-type-assertions": "off",
-        "@typescript-eslint/prefer-nullish-coalescing": "off",
-        "@typescript-eslint/triple-slash-reference": "off",
-        "@typescript-eslint/no-misused-promises": "off"
-    },
-    "overrides": [
-        {
-          "files": ["next.config.js"],
-          "parserOptions": {
-            "project": null
-          }
-        }
-      ]
-  
-}
+      "prettier/prettier": ["error", {
+        "printWidth": 120,
+        "tabWidth": 2,
+        "singleQuote": true,
+        "trailingComma": "all",
+        "arrowParens": "always",
+        "semi": false,
+        "endOfLine": "auto"
+      }]
+    }
+  }
