@@ -9,12 +9,14 @@ export const metadata: Metadata = {
 }
 
 export default function DashboardPage({ searchParams }: { searchParams: { search: string } }) {
+  const search = searchParams.search || ''
+
   return (
     <main className="container my-10 gap-4">
       <div className="grid gap-4">
         <FilterField />
         <Suspense key={searchParams.search} fallback={<GroupSlugsCardSkeleton />}>
-          <GroupSlugsCard search={searchParams.search} />
+          <GroupSlugsCard search={search} />
         </Suspense>
       </div>
     </main>

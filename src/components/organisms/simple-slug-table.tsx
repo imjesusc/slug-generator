@@ -1,9 +1,9 @@
 'use client'
 
-import { SlugsTable } from '@/components/molecules/SlugsTable'
 import { type SimpleSlugInterface } from '@/models'
 import useLinkStore from '@/store/linkStore'
 import { useEffect, useState } from 'react'
+import { SlugsTable } from '../molecules'
 
 export function SimpleSlugTable() {
   const { links } = useLinkStore()

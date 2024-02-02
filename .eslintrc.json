@@ -12,6 +12,7 @@
         "arrowParens": "always",
         "semi": false,
         "endOfLine": "auto"
-      }]
+      }],
+      "@typescript-eslint/no-explicit-any": "off"
     }
   }

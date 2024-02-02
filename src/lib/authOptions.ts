@@ -8,16 +8,16 @@ export const authOptions: NextAuthOptions = {
   providers: [
     GithubProvider({
       clientId: process.env.ENV_GITHUB_CLIENT_ID ?? '',
-      clientSecret: process.env.ENV_GITHUB_SECRET ?? ''
-    })
+      clientSecret: process.env.ENV_GITHUB_SECRET ?? '',
+    }),
   ],
   secret: process.env.NEXTAUTH_SECRET ?? '',
   callbacks: {
-    async session ({ session, user }) {
+    async session({ session, user }) {
       return await Promise.resolve({
         ...session,
-        userId: user.id
+        userId: user.id,
       })
-    }
-  }
+    },
+  },
 }

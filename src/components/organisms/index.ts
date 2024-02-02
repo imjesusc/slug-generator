@@ -1,3 +1,3 @@
 export * from './group-slugs-card'
-export * from './SimpleSlugForm'
-export * from './SimpleSlugTable'
+export * from './simple-slug-form'
+export * from './simple-slug-table'

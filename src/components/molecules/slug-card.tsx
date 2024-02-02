@@ -1,6 +1,5 @@
 'use client'
 
-import { copyToClipboard } from '@/utils/copyToClipboard'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui'
 import {
   Button,
@@ -19,6 +18,7 @@ import { ControlsForm } from '.'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { copyToClipboard } from '@/utils/copy-to-clipboard'
 
 export const SlugCard = ({ id, url, shortUrl, slug, description }: CustomSlugInterface) => {
   const { data } = useSession()

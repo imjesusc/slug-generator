@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { type FC } from 'react'
 import { Button } from '../ui'
 import { cn } from '@/lib/utils'
-import { copyToClipboard } from '@/utils/copyToClipboard'
+import { copyToClipboard } from '@/utils/copy-to-clipboard'
 export const SlugsTable: FC<SlugsTableProps> = ({ links }) => {
   return (
     <Table className="w-full overflow-hidden">

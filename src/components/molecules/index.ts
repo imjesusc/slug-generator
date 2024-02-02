@@ -1,4 +1,4 @@
-export * from './SlugsTable'
+export * from './slugs-table'
 export * from './user-nav'
 export * from './control-form'
 export * from './filter-field'

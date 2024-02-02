@@ -9,19 +9,19 @@ interface LinkStoreProps {
 
 const useLinkStore = create(
   persist<LinkStoreProps>(
-    (set, get) => ({
+    (set) => ({
       links: [],
       setLinks: (links) => {
         set((state) => ({
           ...state,
-          links
+          links,
         }))
-      }
+      },
     }),
     {
-      name: 'links'
-    }
-  )
+      name: 'links',
+    },
+  ),
 )
 
 export default useLinkStore
