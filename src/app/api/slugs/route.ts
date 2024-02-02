@@ -2,7 +2,7 @@ import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { NextResponse } from 'next/server'
 
-export async function GET (request: Request) {
+export async function GET(request: Request) {
   const url = new URL(request.url)
   const searchQuery = url.searchParams.get('search')
   const userId = url.searchParams.get('userId')
@@ -14,48 +14,38 @@ export async function GET (request: Request) {
       where: {
         userId,
         slug: {
-          contains: searchQuery || ''
-        }
-      }
-
+          contains: searchQuery || '',
+        },
+      },
     })
 
-    if (userSlugs) return NextResponse.json({ message: 'User slugs successfully retrieved', userSlugs }, { status: 200 })
+    if (userSlugs)
+      return NextResponse.json({ message: 'User slugs successfully retrieved', userSlugs }, { status: 200 })
 
     return NextResponse.json({ message: 'Something went wrong.' }, { status: 500 })
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       console.log(error.message)
-      return NextResponse.json(
-        { message: error.message },
-        { status: 500 }
-      )
+      return NextResponse.json({ message: error.message }, { status: 500 })
     }
 
-    return NextResponse.json(
-      { message: 'Something went wrong.' },
-      { status: 500 }
-    )
+    return NextResponse.json({ message: 'Something went wrong.' }, { status: 500 })
   }
 }
 
-export async function POST (request: Request) {
+export async function POST(request: Request) {
   try {
     const { url, slug, description, userId } = await request.json()
 
     // Primero verificamos que el slug no exista
-
     const existingSlug = await prisma.link.findUnique({
       where: {
-        slug
-      }
+        slug,
+      },
     })
 
     if (existingSlug) {
-      return NextResponse.json(
-        { message: 'Slug already exists.' },
-        { status: 400 }
-      )
+      return NextResponse.json({ message: 'Slug already exists.' }, { status: 400 })
     }
 
     const createdSlug = await prisma.link.create({
@@ -64,8 +54,8 @@ export async function POST (request: Request) {
         slug,
         description,
         userId,
-        shortUrl: `${request.headers.get('x-forwarded-proto')}://${request.headers.get('host')}/${slug}`
-      }
+        shortUrl: `${request.headers.get('x-forwarded-proto')}://${request.headers.get('host')}/${slug}`,
+      },
     })
 
     if (createdSlug) return NextResponse.json({ message: 'Slug created successfully.' }, { status: 201 })
@@ -79,7 +69,7 @@ export async function POST (request: Request) {
   }
 }
 
-export async function PUT (request: Request) {
+export async function PUT(request: Request) {
   try {
     const { url, slug, description, userId, id } = await request.json()
 
@@ -87,28 +77,25 @@ export async function PUT (request: Request) {
     const existingSlug = await prisma.link.findUnique({
       where: {
         id,
-        userId
-      }
+        userId,
+      },
     })
 
     if (!existingSlug) {
-      return NextResponse.json(
-        { message: 'Slug does not exist.' },
-        { status: 400 }
-      )
+      return NextResponse.json({ message: 'Slug does not exist.' }, { status: 400 })
     }
 
     const createdSlug = await prisma.link.update({
       where: {
-        id
+        id,
       },
       data: {
         url,
         slug,
         description,
         userId,
-        shortUrl: `${request.headers.get('x-forwarded-proto')}://${request.headers.get('host')}/${slug}`
-      }
+        shortUrl: `${request.headers.get('x-forwarded-proto')}://${request.headers.get('host')}/${slug}`,
+      },
     })
 
     if (createdSlug) return NextResponse.json({ message: 'Slug updated successfully.' }, { status: 201 })
@@ -122,7 +109,7 @@ export async function PUT (request: Request) {
   }
 }
 
-export async function DELETE (request: Request) {
+export async function DELETE(request: Request) {
   const url = new URL(request.url)
   const userId = url.searchParams.get('userId')
   const slugId = url.searchParams.get('slugId')
@@ -134,8 +121,8 @@ export async function DELETE (request: Request) {
   const existingLink = await prisma.link.findUnique({
     where: {
       userId,
-      id: Number(slugId)
-    }
+      id: Number(slugId),
+    },
   })
 
   if (!existingLink) {
@@ -146,8 +133,8 @@ export async function DELETE (request: Request) {
     const deletedLink = await prisma.link.delete({
       where: {
         userId,
-        id: Number(slugId)
-      }
+        id: Number(slugId),
+      },
     })
     return NextResponse.json({ message: 'Link deleted successfully.', deletedLink }, { status: 200 })
   } catch (error) {
