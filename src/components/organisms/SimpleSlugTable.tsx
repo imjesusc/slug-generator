@@ -5,9 +5,10 @@ import { type SimpleSlugInterface } from '@/models'
 import useLinkStore from '@/store/linkStore'
 import { useEffect, useState } from 'react'
 
-export function SimpleSlugTable () {
+export function SimpleSlugTable() {
   const { links } = useLinkStore()
   const [data, setData] = useState<SimpleSlugInterface[]>([])
+
   useEffect(() => {
     const reversedLinks = links.slice().reverse()
     setData(reversedLinks)

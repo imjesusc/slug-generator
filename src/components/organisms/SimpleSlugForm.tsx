@@ -3,16 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import type * as z from 'zod'
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  Button,
-  Form,
-  Input
-} from '@/components/ui'
+import { FormControl, FormField, FormItem, FormLabel, FormMessage, Button, Form, Input } from '@/components/ui'
 import useLinkStore from '@/store/linkStore'
 import { simpleFormSchema } from '@/lib/validations/simpleFormSchema'
 import { type ReactNode, useState } from 'react'
@@ -27,8 +18,8 @@ export const SimpleSlugForm = () => {
     resolver: zodResolver(simpleFormSchema),
     defaultValues: {
       originalUrl: '',
-      customSlug: ''
-    }
+      customSlug: '',
+    },
   })
 
   const onSubmit = async (data: z.infer<typeof simpleFormSchema>) => {
@@ -36,9 +27,9 @@ export const SimpleSlugForm = () => {
     const OPTIONS = {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     }
     try {
       const response = await fetch('/api/slug', OPTIONS)
@@ -64,8 +55,7 @@ export const SimpleSlugForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit) as any}
-      className="grid gap-4 tablet:grid-cols-2 w-full">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 tablet:grid-cols-2 w-full">
         <FormField
           control={form.control}
           name="originalUrl"
@@ -95,7 +85,7 @@ export const SimpleSlugForm = () => {
         />
 
         <div className="tablet:col-span-2">
-          <Button className="w-full">{isLoading ? 'Creating...' : 'Create' }</Button>
+          <Button className="w-full">{isLoading ? 'Creating...' : 'Create'}</Button>
         </div>
       </form>
     </Form>
