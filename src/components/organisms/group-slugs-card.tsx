@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth'
-import SlugCard from '../molecules/SlugCard'
 import { type CustomSlugInterface } from '@/models/custom-slug.interface'
 import { authOptions } from '@/lib/authOptions'
+import { SlugCard } from '../molecules'
 
 const getSlugsData = async (userId: string, query?: string) => {
   const res = await fetch(`${process.env.NEXTAUTH_URL}/api/slugs?userId=${userId}&search=${query}`)

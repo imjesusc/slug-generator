@@ -20,7 +20,7 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
-export default function SlugCard({ id, url, shortUrl, slug, description }: CustomSlugInterface) {
+export const SlugCard = ({ id, url, shortUrl, slug, description }: CustomSlugInterface) => {
   const { data } = useSession()
   const router = useRouter()
   const handleDelete = async (userId: string | undefined, slugId: number | undefined) => {
