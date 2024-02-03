@@ -62,7 +62,9 @@ export async function POST(request: Request) {
       },
     })
 
-    if (createdSlug) return NextResponse.json({ message: 'Slug created successfully.' }, { status: 201 })
+    console.log(createdSlug)
+
+    if (createdSlug.slug) return NextResponse.json({ message: 'Slug created successfully.' }, { status: 201 })
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       console.log(error.message)

@@ -22,7 +22,7 @@ model SimpleShortenedUrl {
 model link {
     id          Int      @id @default(autoincrement())
     url         String
-    shortUrl    String   @unique
+    shortUrl    String   
     slug        String   
     description String?
     createdAt   DateTime @default(now())
