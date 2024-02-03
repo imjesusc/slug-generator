@@ -25,7 +25,7 @@ import { type ControlsFormProps } from '@/models'
 import { controlsFormData } from '@/lib/validations'
 import { useRouter } from 'next/navigation'
 
-export function ControlsForm({ action, slugData, variant, children }: ControlsFormProps) {
+export const CreateForm = ({ variant, children }: ControlsFormProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const { data } = useSession()
   const router = useRouter()
@@ -34,94 +34,54 @@ export function ControlsForm({ action, slugData, variant, children }: ControlsFo
   const form = useForm<z.infer<typeof controlsFormData>>({
     resolver: zodResolver(controlsFormData),
     defaultValues: {
-      url: slugData?.url ?? '',
-      slug: slugData?.slug ?? '',
-      description: slugData?.description ?? '',
+      url: '',
+      slug: '',
+      description: '',
       userId: data?.userId,
     },
   })
 
   const onSubmit = async (dataToSend: z.infer<typeof controlsFormData>) => {
-    if (action === 'Create') {
-      setIsLoading(true)
-      const OPTIONS = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dataToSend),
-      }
-      try {
-        const response = await fetch('/api/slugs', OPTIONS)
-        const data = await response.json()
+    console.log(dataToSend)
+    setIsLoading(true)
+    const OPTIONS = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataToSend),
+    }
+    try {
+      const response = await fetch('/api/slugs', OPTIONS)
+      const data = await response.json()
 
-        if (!response.ok) {
-          toast.error(data.message as ReactNode)
-          return
-        }
-
-        router.refresh()
-        setStatus(false)
-        form.reset()
-        toast.success('Custom slug created!', {
-          icon: '🎉',
-        })
-      } catch (error) {
-        if (error instanceof Error) {
-          return error.message
-        }
-      } finally {
-        setIsLoading(false)
-      }
-    } else {
-      setIsLoading(true)
-
-      const putData = {
-        url: dataToSend.url,
-        slug: dataToSend.slug,
-        description: dataToSend.description,
-        userId: data?.userId,
-        id: slugData.id,
+      if (!response.ok) {
+        toast.error(data.message as ReactNode)
+        return
       }
 
-      const OPTIONS = {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(putData),
+      router.refresh()
+      setStatus(false)
+      form.reset()
+      toast.success('Custom slug created!', {
+        icon: '🎉',
+      })
+    } catch (error) {
+      if (error instanceof Error) {
+        return error.message
       }
-
-      try {
-        const res = await fetch('/api/slugs', OPTIONS)
-
-        if (!res.ok) {
-          const errorData = await res.json()
-          toast.error(errorData.message as ReactNode)
-          return
-        }
-
-        router.refresh()
-        toast.success('Custom slug updated!', {
-          icon: '🎉',
-        })
-        setStatus(false)
-      } catch (error) {
-        if (error instanceof Error) {
-          return error.message
-        }
-      } finally {
-        setIsLoading(false)
-      }
+    } finally {
+      setIsLoading(false)
     }
   }
+
   return (
     <Dialog open={status} onOpenChange={setStatus}>
       <DialogTrigger asChild>{children}</DialogTrigger>
 
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{action} Custom Slug</DialogTitle>
+          <DialogTitle>Create Custom Slug</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -177,7 +137,7 @@ export function ControlsForm({ action, slugData, variant, children }: ControlsFo
                 variant={variant ?? 'default'}
                 className="w-full text-foreground bg-[#adfa1d] hover:bg-[#adfa1d]/70"
               >
-                {isLoading ? <span className="animate-pulse">...</span> : <span>{action ?? 'Confirm'}</span>}
+                {isLoading ? <span className="animate-pulse">...</span> : <span>Create slug</span>}
               </Button>
             </div>
           </form>

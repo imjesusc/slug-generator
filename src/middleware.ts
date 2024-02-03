@@ -22,11 +22,13 @@ export async function middleware(request: NextRequest) {
   }
 
   if (nextAuthToken) {
+    const user = cookieStore.get('id')
+    const userId = user?.value
+
     try {
       // Fetching Custom Shortened Url
-      const resCustomSlug = await fetch(`${baseUrl}/api/slugs/${customSlug}`)
+      const resCustomSlug = await fetch(`${baseUrl}/api/slugs/${userId}?slug=${customSlug}`)
       const dataCustomSlug = await resCustomSlug.json()
-
       // Custom Shortened Url
       if (dataCustomSlug?.userSlug?.url) {
         return NextResponse.redirect(new URL(dataCustomSlug.userSlug.url as string))

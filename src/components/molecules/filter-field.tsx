@@ -3,7 +3,7 @@
 import { Button, Input } from '@/components/ui'
 import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 import { useDebouncedCallback } from 'use-debounce'
-import { ControlsForm } from '.'
+import { CreateForm } from '.'
 export const FilterField = () => {
   const pathname = usePathname()
   const { replace } = useRouter()
@@ -30,9 +30,9 @@ export const FilterField = () => {
           handleSearch(e.target.value)
         }}
       />
-      <ControlsForm action="Create">
+      <CreateForm>
         <Button variant="outline">Create</Button>
-      </ControlsForm>
+      </CreateForm>
     </div>
   )
 }

@@ -14,11 +14,11 @@ import { ScissorsIcon, MixerHorizontalIcon, CopyIcon } from '@radix-ui/react-ico
 import { type CustomSlugInterface } from '@/models/custom-slug.interface'
 import { toast } from 'sonner'
 import { type ReactNode } from 'react'
-import { ControlsForm } from '.'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { copyToClipboard } from '@/utils/copy-to-clipboard'
+import { EditForm } from './edit-form'
 
 export const SlugCard = ({ id, url, shortUrl, slug, description }: CustomSlugInterface) => {
   const { data } = useSession()
@@ -85,14 +85,14 @@ export const SlugCard = ({ id, url, shortUrl, slug, description }: CustomSlugInt
                     <CopyIcon />
                   </DropdownMenuShortcut>
                 </DropdownMenuItem>
-                <ControlsForm slugData={{ url, id, slug, description }} action="Update">
+                <EditForm slugData={{ url, id, slug, description }}>
                   <div className="relative flex hover:bg-accent items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground  cursor-pointer">
                     Edit
                     <span className="ml-auto text-xs tracking-widest opacity-60">
                       <MixerHorizontalIcon />
                     </span>
                   </div>
-                </ControlsForm>
+                </EditForm>
 
                 <DropdownMenuItem
                   className="cursor-pointer"
