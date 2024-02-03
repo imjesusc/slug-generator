@@ -41,9 +41,10 @@ export async function POST(request: Request) {
     const { url, slug, description, userId } = await request.json()
 
     // Primero verificamos que el slug no exista
-    const existingSlug = await prisma.link.findUnique({
+    const existingSlug = await prisma.link.findMany({
       where: {
         slug,
+        userId,
       },
     })
 
@@ -77,7 +78,7 @@ export async function PUT(request: Request) {
     const { url, slug, description, userId, id } = await request.json()
 
     // Primero verificamos que el id del slug exista
-    const existingSlug = await prisma.link.findUnique({
+    const existingSlug = await prisma.link.findMany({
       where: {
         id,
         userId,
@@ -91,6 +92,7 @@ export async function PUT(request: Request) {
     const createdSlug = await prisma.link.update({
       where: {
         id,
+        userId,
       },
       data: {
         url,
