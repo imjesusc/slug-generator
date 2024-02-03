@@ -48,7 +48,7 @@ export async function POST(request: Request) {
       },
     })
 
-    if (existingSlug) {
+    if (existingSlug.length > 0) {
       return NextResponse.json({ message: 'Slug already exists.' }, { status: 400 })
     }
 
@@ -62,7 +62,7 @@ export async function POST(request: Request) {
       },
     })
 
-    if (createdSlug) return NextResponse.json({ message: 'Slug created successfully.' }, { status: 201 })
+    if (createdSlug.slug) return NextResponse.json({ message: 'Slug created successfully.' }, { status: 201 })
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       console.log(error.message)
@@ -85,7 +85,7 @@ export async function PUT(request: Request) {
       },
     })
 
-    if (!existingSlug) {
+    if (!existingSlug || existingSlug.length === 0) {
       return NextResponse.json({ message: 'Slug does not exist.' }, { status: 400 })
     }
 
@@ -129,6 +129,8 @@ export async function DELETE(request: Request) {
       id: Number(slugId),
     },
   })
+
+  console.log(existingLink)
 
   if (!existingLink) {
     return NextResponse.json({ message: 'Link not found.' }, { status: 404 })
