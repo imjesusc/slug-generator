@@ -3,7 +3,7 @@
 import { Button } from '../ui'
 import { GitHubLogoIcon } from '@radix-ui/react-icons'
 import { signIn, useSession } from 'next-auth/react'
-import { UserNav } from '../molecules/user-nav'
+import { UserNav } from './user-nav'
 import { type UserNavProps } from '@/models/UserNav.interface'
 import { useEffect } from 'react'
 

@@ -42,7 +42,6 @@ export const CreateForm = ({ variant, children }: ControlsFormProps) => {
   })
 
   const onSubmit = async (dataToSend: z.infer<typeof controlsFormData>) => {
-    console.log(dataToSend)
     setIsLoading(true)
     const OPTIONS = {
       method: 'POST',

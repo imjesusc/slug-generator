@@ -12,10 +12,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui'
 import { type UserNavProps } from '@/models/UserNav.interface'
-import { ExternalLinkIcon, GitHubLogoIcon, StarIcon } from '@radix-ui/react-icons'
+import { ExternalLinkIcon, GitHubLogoIcon, PlusIcon, StarIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
 import { type FC } from 'react'
 import { signOut } from 'next-auth/react'
+import { CreateForm } from '../molecules/create-form'
 
 const menuItems = [
   {
@@ -55,6 +56,14 @@ export const UserNav: FC<UserNavProps> = ({ user }) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuGroup className="font-sans">
+          <CreateForm>
+            <div className="relative flex hover:bg-accent items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground  cursor-pointer">
+              Create a new link
+              <span className="ml-auto text-xs tracking-widest opacity-60">
+                <PlusIcon />
+              </span>
+            </div>
+          </CreateForm>
           {menuItems.map((item) => (
             <Link key={item.label} target="_blank" href={item.link}>
               <DropdownMenuItem className="cursor-pointer">
