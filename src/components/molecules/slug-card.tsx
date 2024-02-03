@@ -112,7 +112,9 @@ export const SlugCard = ({ id, url, shortUrl, slug, description }: CustomSlugInt
       </CardHeader>
 
       <CardContent>
-        <CardDescription className="h-[40px] max-h-[40px] overflow-hidden">{description}</CardDescription>
+        <CardDescription className="h-[40px] max-h-[40px] overflow-hidden">
+          {description || 'No description.'}
+        </CardDescription>
       </CardContent>
     </Card>
   )

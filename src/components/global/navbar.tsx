@@ -22,6 +22,7 @@ export function NavBar() {
       callbackUrl: '/dashboard',
     })
   }
+
   return (
     <header className="w-screen grid place-content-center h-16">
       <nav className="flex w-screen container justify-between">
@@ -29,17 +30,23 @@ export function NavBar() {
           <p className="text-base font-medium">Slug Generator</p>
         </div>
         <div>
-          {status === 'authenticated' && (
-            <div className="flex items-center gap-5">
-              <UserNav user={userData?.user} image={userData?.image} />
-            </div>
-          )}
+          {status !== 'loading' ? (
+            <>
+              {status === 'authenticated' && (
+                <div className="flex items-center gap-5">
+                  <UserNav user={userData?.user} image={userData?.image} />
+                </div>
+              )}
 
-          {status !== 'authenticated' && (
-            <Button variant={'outline'} className="gap-2" onClick={handleSignIn}>
-              Sign with
-              <GitHubLogoIcon />
-            </Button>
+              {status !== 'authenticated' && (
+                <Button variant={'outline'} className="gap-2" onClick={handleSignIn}>
+                  Sign with
+                  <GitHubLogoIcon />
+                </Button>
+              )}
+            </>
+          ) : (
+            <></>
           )}
         </div>
       </nav>

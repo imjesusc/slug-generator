@@ -63,7 +63,9 @@ export function ControlsForm({ action, slugData, variant, children }: ControlsFo
         router.refresh()
         setStatus(false)
         form.reset()
-        toast.success('Custom slug created!')
+        toast.success('Custom slug created!', {
+          icon: '🎉',
+        })
       } catch (error) {
         if (error instanceof Error) {
           return error.message
@@ -100,7 +102,9 @@ export function ControlsForm({ action, slugData, variant, children }: ControlsFo
         }
 
         router.refresh()
-        toast.success('Custom slug updated!')
+        toast.success('Custom slug updated!', {
+          icon: '🎉',
+        })
         setStatus(false)
       } catch (error) {
         if (error instanceof Error) {

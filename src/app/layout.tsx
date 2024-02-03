@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui'
 
 import { NavBar } from '@/components/global'
 import { AuthProvider } from './Providers'
+import { cn } from '@/lib/utils'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={cn(inter.className, 'overflow-x-hidden')}>
         <AuthProvider>
           <NavBar />
           {children}

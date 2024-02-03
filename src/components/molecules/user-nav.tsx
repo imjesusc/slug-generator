@@ -49,7 +49,7 @@ export const UserNav: FC<UserNavProps> = ({ user }) => {
         <Button variant="outline">
           <Avatar className="w-5 h-5 mr-2 grayscale">
             <AvatarImage src="https://avatar.vercel.sh/personal.png" alt="@shadcn" />
-            <AvatarFallback className="text-sm">CN</AvatarFallback>
+            <AvatarFallback className="text-sm">{user.name[0]}</AvatarFallback>
           </Avatar>
           {user.name.split(' ')[0]}
         </Button>
