@@ -3,7 +3,9 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
   const cookieStore = cookies()
-  const nextAuthToken = cookieStore.get('next-auth.session-token')
+  const tokenName =
+    process.env.NODE_ENV === 'development' ? 'next-auth.session-token' : process.env.NEXT_AUTH_TOKEN_NAME_PROD
+  const nextAuthToken = cookieStore.get(tokenName as string)
 
   const { pathname } = request.nextUrl
   const baseUrl = request.nextUrl.origin
