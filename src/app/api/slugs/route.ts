@@ -17,6 +17,9 @@ export async function GET(request: Request) {
           contains: searchQuery || '',
         },
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     })
 
     if (userSlugs)
