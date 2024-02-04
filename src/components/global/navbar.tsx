@@ -5,7 +5,6 @@ import { GitHubLogoIcon } from '@radix-ui/react-icons'
 import { signIn, useSession } from 'next-auth/react'
 import { UserNav } from './user-nav'
 import { type UserNavProps } from '@/models/UserNav.interface'
-import { useEffect } from 'react'
 
 export function NavBar() {
   const { data, status } = useSession()
@@ -17,10 +16,6 @@ export function NavBar() {
     },
     image: data?.user?.image ?? '',
   }
-
-  useEffect(() => {
-    globalThis.document.cookie = `id=${data?.userId}` || ''
-  }, [data])
 
   const handleSignIn = async () => {
     await signIn('github', {
