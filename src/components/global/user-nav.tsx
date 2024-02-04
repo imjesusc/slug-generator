@@ -1,8 +1,15 @@
+'use client'
+
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
   Button,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -14,10 +21,9 @@ import {
 import { type UserNavProps } from '@/models/UserNav.interface'
 import { ExternalLinkIcon, GitHubLogoIcon, PlusIcon, StarIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
-import { type FC } from 'react'
 import { signOut } from 'next-auth/react'
-import { CreateForm } from '../molecules/create-form'
-
+import { FC, useState } from 'react'
+import SlugForm from '../organisms/slug-form'
 const menuItems = [
   {
     label: 'Report a bug',
@@ -37,6 +43,7 @@ const menuItems = [
 ]
 
 export const UserNav: FC<UserNavProps> = ({ user }) => {
+  const [status, setStatus] = useState(false)
   const handleSignOut = async () => {
     await signOut({
       callbackUrl: '/',
@@ -44,40 +51,49 @@ export const UserNav: FC<UserNavProps> = ({ user }) => {
   }
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline">
-          <Avatar className="w-5 h-5 mr-2 grayscale">
-            <AvatarImage src="https://avatar.vercel.sh/personal.png" alt="@shadcn" />
-            <AvatarFallback className="text-sm">{user.name[0]}</AvatarFallback>
-          </Avatar>
-          {user.name.split(' ')[0]}
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
-        <DropdownMenuGroup className="font-sans">
-          <CreateForm>
-            <div className="relative flex hover:bg-accent items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground  cursor-pointer">
-              Create a new link
-              <span className="ml-auto text-xs tracking-widest opacity-60">
-                <PlusIcon />
-              </span>
-            </div>
-          </CreateForm>
-          {menuItems.map((item) => (
-            <Link key={item.label} target="_blank" href={item.link}>
-              <DropdownMenuItem className="cursor-pointer">
-                {item.label}
-                <DropdownMenuShortcut>{item.icon}</DropdownMenuShortcut>
+    <Dialog open={status} onOpenChange={setStatus}>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline">
+            <Avatar className="w-5 h-5 mr-2 grayscale">
+              <AvatarImage src="https:avatar.vercel.sh/personal.png" alt="@shadcn" />
+              <AvatarFallback className="text-sm">{user.name[0]}</AvatarFallback>
+            </Avatar>
+            {user.name.split(' ')[0]}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56" align="end" forceMount>
+          <DropdownMenuGroup className="font-sans">
+            <DialogTrigger asChild>
+              <DropdownMenuItem>
+                Create a new link
+                <span className="ml-auto text-xs tracking-widest opacity-60">
+                  <PlusIcon />
+                </span>
               </DropdownMenuItem>
-            </Link>
-          ))}
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
-          Log out
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+            </DialogTrigger>
+            {menuItems.map((item) => (
+              <Link key={item.label} target="_blank" href={item.link}>
+                <DropdownMenuItem className="cursor-pointer">
+                  {item.label}
+                  <DropdownMenuShortcut>{item.icon}</DropdownMenuShortcut>
+                </DropdownMenuItem>
+              </Link>
+            ))}
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
+            Log out
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Create a new slug.</DialogTitle>
+        </DialogHeader>
+        <SlugForm setStatus={setStatus} />
+      </DialogContent>
+    </Dialog>
   )
 }

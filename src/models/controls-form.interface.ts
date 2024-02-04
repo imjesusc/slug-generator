@@ -1,8 +1,7 @@
-import { type ReactNode } from 'react'
-
 export interface ControlsFormProps {
-  slugData?: any
   className?: string
-  children?: ReactNode
+  action?: string
+  slugData?: any
   variant?: any
+  setStatus: (status: boolean) => void
 }

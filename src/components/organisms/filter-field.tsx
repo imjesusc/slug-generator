@@ -3,6 +3,7 @@
 import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 import { useDebouncedCallback } from 'use-debounce'
 import { Input } from '../ui'
+import CreateForm from '../molecules/create-form'
 export const FilterField = () => {
   const pathname = usePathname()
   const { replace } = useRouter()
@@ -29,6 +30,7 @@ export const FilterField = () => {
           handleSearch(e.target.value)
         }}
       />
+      <CreateForm />
     </div>
   )
 }

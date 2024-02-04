@@ -19,10 +19,6 @@ export default function DashboardPage({ searchParams }: { searchParams: { search
             <h1 className="text-2xl font-semibold">Dashboard</h1>
             <p className="text-balance">Create and manage your slugs in one place 🎉.</p>
           </div>
-
-          {/* <CreateForm>
-            <Button variant="outline">Create</Button>
-          </CreateForm> */}
         </div>
         <FilterField />
         <Suspense key={searchParams.search} fallback={<GroupSlugsCardSkeleton />}>

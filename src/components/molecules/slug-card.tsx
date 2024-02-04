@@ -1,28 +1,40 @@
 'use client'
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DropdownMenuItem,
+} from '../ui'
 import {
   Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
-  DropdownMenuItem,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui'
 import { ScissorsIcon, MixerHorizontalIcon, CopyIcon } from '@radix-ui/react-icons'
 import { type CustomSlugInterface } from '@/models/custom-slug.interface'
 import { toast } from 'sonner'
-import { type ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { copyToClipboard } from '@/utils/copy-to-clipboard'
-import { EditForm } from './edit-form'
+import { EditForm } from '.'
 
 export const SlugCard = ({ id, url, shortUrl, slug, description }: CustomSlugInterface) => {
   const { data } = useSession()
   const router = useRouter()
+  const [status, setStatus] = useState(false)
   const handleDelete = async (userId: string | undefined, slugId: number | undefined) => {
     const res = await fetch(`/api/slugs?userId=${userId}&slugId=${slugId}`, {
       method: 'DELETE',
@@ -66,48 +78,57 @@ export const SlugCard = ({ id, url, shortUrl, slug, description }: CustomSlugInt
             <CardDescription className="truncate">{url}</CardDescription>
           </div>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button className="relative rounded-full " variant="outline">
-                Controls
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-36" align="end" forceMount>
-              <DropdownMenuGroup className="font-sans">
-                <DropdownMenuItem
-                  onClick={async () => {
-                    await copyToClipboard(shortUrl ?? '')
-                  }}
-                  className="cursor-pointer"
-                >
-                  Copy
-                  <DropdownMenuShortcut>
-                    <CopyIcon />
-                  </DropdownMenuShortcut>
-                </DropdownMenuItem>
-                <EditForm slugData={{ url, id, slug, description }}>
-                  <div className="relative flex hover:bg-accent items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground  cursor-pointer">
-                    Edit
-                    <span className="ml-auto text-xs tracking-widest opacity-60">
-                      <MixerHorizontalIcon />
-                    </span>
-                  </div>
-                </EditForm>
+          <Dialog open={status} onOpenChange={setStatus}>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button className="relative rounded-full " variant="outline">
+                  Controls
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-36" align="end" forceMount>
+                <DropdownMenuGroup className="font-sans">
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      await copyToClipboard(shortUrl ?? '')
+                    }}
+                    className="cursor-pointer"
+                  >
+                    Copy
+                    <DropdownMenuShortcut>
+                      <CopyIcon />
+                    </DropdownMenuShortcut>
+                  </DropdownMenuItem>
 
-                <DropdownMenuItem
-                  className="cursor-pointer"
-                  onClick={async () => {
-                    await handleDelete(data?.userId, id)
-                  }}
-                >
-                  Delete
-                  <DropdownMenuShortcut>
-                    <ScissorsIcon />
-                  </DropdownMenuShortcut>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                  <DialogTrigger asChild>
+                    <DropdownMenuItem>
+                      Edit
+                      <span className="ml-auto text-xs tracking-widest opacity-60">
+                        <MixerHorizontalIcon />
+                      </span>
+                    </DropdownMenuItem>
+                  </DialogTrigger>
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={async () => {
+                      await handleDelete(data?.userId, id)
+                    }}
+                  >
+                    Delete
+                    <DropdownMenuShortcut>
+                      <ScissorsIcon />
+                    </DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Are you absolutely sure?</DialogTitle>
+              </DialogHeader>
+              <EditForm setStatus={setStatus} slugData={{ url, id, slug, description }} />
+            </DialogContent>
+          </Dialog>
         </div>
       </CardHeader>
 

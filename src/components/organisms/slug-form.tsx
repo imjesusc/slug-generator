@@ -1,20 +1,17 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import { FormControl, FormField, FormItem, FormLabel, FormMessage, Form } from '@/components/ui'
-import { Input } from '@/components/ui/input'
-import { zodResolver } from '@hookform/resolvers/zod'
+import React, { ReactNode, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { type z } from 'zod'
-import { type ReactNode, useState } from 'react'
+import { Form, FormField, FormItem, FormLabel, FormControl, Input, FormMessage, Button } from '../ui'
 import { Textarea } from '../ui/textarea'
-import { toast } from 'sonner'
-import { useSession } from 'next-auth/react'
-import { type ControlsFormProps } from '@/models'
 import { controlsFormData } from '@/lib/validations'
+import { toast } from 'sonner'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
-export const EditForm = ({ slugData, setStatus }: ControlsFormProps) => {
+export const SlugForm = ({ setStatus }: any) => {
   const [isLoading, setIsLoading] = useState(false)
   const { data } = useSession()
   const router = useRouter()
@@ -22,9 +19,9 @@ export const EditForm = ({ slugData, setStatus }: ControlsFormProps) => {
   const form = useForm<z.infer<typeof controlsFormData>>({
     resolver: zodResolver(controlsFormData),
     defaultValues: {
-      url: slugData?.url ?? '',
-      slug: slugData?.slug ?? '',
-      description: slugData?.description ?? '',
+      url: '',
+      slug: '',
+      description: '',
       userId: data?.userId,
     },
   })
@@ -32,35 +29,29 @@ export const EditForm = ({ slugData, setStatus }: ControlsFormProps) => {
   const onSubmit = async (dataToSend: z.infer<typeof controlsFormData>) => {
     setIsLoading(true)
 
-    const putData = {
-      url: dataToSend.url,
-      slug: dataToSend.slug,
-      description: dataToSend.description,
-      userId: data?.userId,
-      id: slugData.id,
-    }
-
-    const OPTIONS = {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(putData),
-    }
-
     try {
-      const res = await fetch('/api/slugs', OPTIONS)
+      const OPTIONS = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSend),
+      }
 
-      if (!res.ok) {
-        const errorData = await res.json()
-        toast.error(errorData.message as ReactNode)
+      const response = await fetch('/api/slugs', OPTIONS)
+      const data = await response.json()
+
+      if (!response.ok) {
+        toast.error(data.message as ReactNode)
         return
       }
 
       router.refresh()
-      toast.success('Custom slug updated!', {
+      form.reset()
+      toast.success('Custom slug created!', {
         icon: '🎉',
       })
+
       setStatus(false)
     } catch (error) {
       if (error instanceof Error) {
@@ -70,6 +61,7 @@ export const EditForm = ({ slugData, setStatus }: ControlsFormProps) => {
       setIsLoading(false)
     }
   }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 w-full">
@@ -121,10 +113,12 @@ export const EditForm = ({ slugData, setStatus }: ControlsFormProps) => {
 
         <div>
           <Button variant={'primary'} className="w-full">
-            {isLoading ? <span className="animate-pulse">...</span> : <span>Edit slug</span>}
+            {isLoading ? <span className="animate-pulse">...</span> : <span>{'Confirm'}</span>}
           </Button>
         </div>
       </form>
     </Form>
   )
 }
+
+export default SlugForm
