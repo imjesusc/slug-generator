@@ -26,10 +26,6 @@ export async function middleware(request: NextRequest) {
     const resCustomSlug = await fetch(`${baseUrl}/api/slugs/${customSlug}`)
     const dataCustomSlug = await resCustomSlug.json()
 
-    if (!dataCustomSlug?.userSlug?.url) {
-      return NextResponse.next()
-    }
-
     // Custom Shortened Url
     if (dataCustomSlug?.userSlug?.url) {
       return NextResponse.redirect(new URL(dataCustomSlug.userSlug.url))

@@ -1,6 +1,6 @@
 # Generate Slug
 
-https://links-slug.vercel.app
+https://slugs.vercel.app
 
 ![Next.js Badge](https://img.shields.io/badge/Next.js-000?logo=nextdotjs&logoColor=fff&style=flat)
 ![Static Badge](https://img.shields.io/badge/Turso_Database-darkgree)
