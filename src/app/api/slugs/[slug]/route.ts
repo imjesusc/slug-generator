@@ -2,16 +2,15 @@ import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { NextResponse } from 'next/server'
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
-  const url = new URL(request.url)
-  const { id } = params
-  const slug = url.searchParams.get('slug')
+export async function GET(request: Request, { params }: { params: { slug: string } }) {
+  const { slug } = params
 
-  if (!slug) return NextResponse.json({ message: 'Something went wrong. Id not found' }, { status: 500 })
+  if (!slug || slug === 'dashboard')
+    return NextResponse.json({ message: 'Something went wrong. Slug not found' }, { status: 500 })
+
   try {
     const userSlug = await prisma.link.findFirst({
       where: {
-        userId: id,
         slug,
       },
     })

@@ -21,36 +21,34 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
-  if (nextAuthToken) {
-    const user = cookieStore.get('id')
-    const userId = user?.value
+  try {
+    // Fetching Custom Shortened Url
+    const resCustomSlug = await fetch(`${baseUrl}/api/slugs/${customSlug}`)
+    const dataCustomSlug = await resCustomSlug.json()
 
-    try {
-      // Fetching Custom Shortened Url
-      const resCustomSlug = await fetch(`${baseUrl}/api/slugs/${userId}?slug=${customSlug}`)
-      const dataCustomSlug = await resCustomSlug.json()
-      // Custom Shortened Url
-      if (dataCustomSlug?.userSlug?.url) {
-        return NextResponse.redirect(new URL(dataCustomSlug.userSlug.url as string))
-      }
-    } catch (error) {
-      console.error('Error fetching custom slug:', error)
+    if (!dataCustomSlug?.userSlug?.url) {
+      return NextResponse.next()
     }
+
+    // Custom Shortened Url
+    if (dataCustomSlug?.userSlug?.url) {
+      return NextResponse.redirect(new URL(dataCustomSlug.userSlug.url))
+    }
+  } catch (error) {
+    console.error('Error fetching custom slug:', error)
   }
 
-  if (!nextAuthToken) {
-    try {
-      // Fetching Simple Shortened Url
-      const resSimpleSlug = await fetch(`${baseUrl}/api/slug?slug=${customSlug}`)
-      const dataSimpleSlug = await resSimpleSlug.json()
+  try {
+    // Fetching Simple Shortened Url
+    const resSimpleSlug = await fetch(`${baseUrl}/api/slug?slug=${customSlug}`)
+    const dataSimpleSlug = await resSimpleSlug.json()
 
-      // Simple Shortened Url
-      if (dataSimpleSlug?.getSimpleSlug?.originalUrl) {
-        return NextResponse.redirect(new URL(dataSimpleSlug.getSimpleSlug.originalUrl as string))
-      }
-    } catch (error) {
-      console.error('Error fetching simple slug:', error)
+    // Simple Shortened Url
+    if (dataSimpleSlug?.getSimpleSlug?.originalUrl) {
+      return NextResponse.redirect(new URL(dataSimpleSlug.getSimpleSlug.originalUrl))
     }
+  } catch (error) {
+    console.error('Error fetching simple slug:', error)
   }
 }
 
