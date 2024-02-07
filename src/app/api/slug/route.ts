@@ -1,13 +1,17 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
+import { simpleFormSchema } from '@/lib/validations'
 
 export async function GET(request: Request) {
   const url = new URL(request.url)
+  const newHeaders = new Headers(request.headers)
+
   const customSlug = url.searchParams.get('slug')
   if (customSlug === '') return NextResponse.json({ message: 'Something went wrong. Slug not found.' }, { status: 500 })
 
   if (!customSlug) return NextResponse.json({ message: 'Something went wrong. Slug not found.' }, { status: 500 })
+
   try {
     const getSimpleSlug = await prisma.simpleShortenedUrl.findUnique({
       where: {
@@ -15,7 +19,18 @@ export async function GET(request: Request) {
       },
     })
 
-    return NextResponse.json({ message: 'User slugs successfully retrieved.', getSimpleSlug }, { status: 200 })
+    // Configuración de encabezados CORS
+    newHeaders.set('Access-Control-Allow-Origin', '*') // Permitir solicitudes desde cualquier origen
+    newHeaders.set('Access-Control-Allow-Methods', 'GET, OPTIONS') // Permitir métodos GET y OPTIONS
+    newHeaders.set('Access-Control-Allow-Headers', 'Content-Type') // Permitir el encabezado Content-Type
+
+    // Configuración de caché
+    newHeaders.set('Cache-Control', 'public, max-age=31536000, immutable')
+
+    return NextResponse.json(
+      { message: 'User slugs successfully retrieved.', getSimpleSlug },
+      { status: 200, headers: newHeaders },
+    )
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       console.log(error.message)
@@ -27,9 +42,9 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const { originalUrl, customSlug } = await request.json()
-
   try {
+    const body = await request.json()
+    const { originalUrl, customSlug } = simpleFormSchema.parse(body)
     const existingSlug = await prisma.simpleShortenedUrl.findUnique({
       where: { customSlug },
     })
