@@ -15,7 +15,7 @@ export function SimpleSlugTable() {
   }, [links])
 
   return (
-    <div className="rounded-lg tablet:min-w-[600px]">
+    <div className="rounded-lg border-transparent shadow-medium tablet:min-w-[600px]">
       <SlugsTable links={data ?? []} />
     </div>
   )

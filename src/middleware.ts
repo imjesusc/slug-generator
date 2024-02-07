@@ -11,7 +11,10 @@ export async function middleware(request: NextRequest) {
   const baseUrl = request.nextUrl.origin
   const customSlug = pathname.split('/').pop()
 
-  const protectedRoutes = ['/dashboard']
+  const protectedRoutes = ['/api/slug', '/api', '/api/slugs', '/api/slug', '/api/auth']
+  if (protectedRoutes.includes(pathname)) {
+    return NextResponse.redirect(new URL('/', request.url))
+  }
 
   if (!nextAuthToken && protectedRoutes.includes(pathname)) {
     return NextResponse.redirect(new URL('/', request.url))
@@ -49,5 +52,7 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|favicon-16x16.png|404).*)'],
+  matcher: [
+    '/((?!api|_next/static|_next/image|favicon.ico|not-found.svg|personal.png|dashboard|favicon-16x16.png|404).*)',
+  ],
 }

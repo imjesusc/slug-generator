@@ -41,7 +41,9 @@ export const SimpleSlugForm = () => {
       } else {
         const resData = await response.json()
         setLinks([...links, resData as SimpleSlugInterface])
-        toast.success('Custom slug created!')
+        toast.success('Custom slug created!.', {
+          icon: '🎉',
+        })
         form.reset()
       }
     } catch (error) {
@@ -84,9 +86,9 @@ export const SimpleSlugForm = () => {
           )}
         />
 
-        <div className="tablet:col-span-2">
-          <Button className="w-full">{isLoading ? 'Creating...' : 'Create'}</Button>
-        </div>
+        <Button type="submit" variant={'shadow'} size={'sm'}>
+          {isLoading ? '...' : 'Create'}
+        </Button>
       </form>
     </Form>
   )

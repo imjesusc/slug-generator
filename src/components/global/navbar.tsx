@@ -24,10 +24,10 @@ export function NavBar() {
   }
 
   return (
-    <header className="w-screen grid place-content-center h-16">
+    <header className="w-screen grid place-content-center h-20">
       <nav className="flex w-screen container justify-between">
         <div className="flex items-center gap-2">
-          <p className="text-base font-medium">Slug Generator</p>
+          <h2 className="text-base font-medium">Slug Generator</h2>
         </div>
         <div>
           {status !== 'loading' ? (
@@ -39,7 +39,7 @@ export function NavBar() {
               )}
 
               {status !== 'authenticated' && (
-                <Button variant={'outline'} className="gap-2" onClick={handleSignIn}>
+                <Button variant={'outline'} size={'sm'} className="gap-2" onClick={handleSignIn}>
                   Sign with
                   <GitHubLogoIcon />
                 </Button>

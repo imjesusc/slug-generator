@@ -130,20 +130,18 @@ export async function DELETE(request: Request) {
     },
   })
 
-  console.log(existingLink)
-
   if (!existingLink) {
     return NextResponse.json({ message: 'Link not found.' }, { status: 404 })
   }
 
   try {
-    const deletedLink = await prisma.link.delete({
+    await prisma.link.delete({
       where: {
         userId,
         id: Number(slugId),
       },
     })
-    return NextResponse.json({ message: 'Link deleted successfully.', deletedLink }, { status: 200 })
+    return NextResponse.json({ message: 'Link deleted successfully.' }, { status: 200 })
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       console.log(error.message)
