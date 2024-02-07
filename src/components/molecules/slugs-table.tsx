@@ -50,7 +50,7 @@ export const SlugsTable: FC<SlugsTableProps> = ({ links }) => {
 
       <TableBody>
         {links.map((link: SimpleSlugInterface, index) => (
-          <TableRow key={link.customSlug} className={cn(index === 0 && 'shadow-medium hover:opacity-80')}>
+          <TableRow key={link.customSlug} className={cn(index === 0 && 'bg-pink-100 hover:opacity-80')}>
             <TableCell>
               <Link
                 className="hover:underline font-medium"
