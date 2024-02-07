@@ -54,7 +54,7 @@ export const UserNav: FC<UserNavProps> = ({ user }) => {
     <Dialog open={status} onOpenChange={setStatus}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline">
+          <Button variant="outline" size={'sm'}>
             <Avatar className="w-5 h-5 mr-2 grayscale">
               <AvatarImage src="/personal.png" alt={user.name} />
               <AvatarFallback className="text-sm">{user.name[0]}</AvatarFallback>
@@ -88,7 +88,7 @@ export const UserNav: FC<UserNavProps> = ({ user }) => {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <DialogContent>
+      <DialogContent className="tablet:min-w-[650px]">
         <DialogHeader>
           <DialogTitle>Create a new slug.</DialogTitle>
         </DialogHeader>

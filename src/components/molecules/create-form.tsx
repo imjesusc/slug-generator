@@ -10,10 +10,10 @@ const CreateForm = () => {
   return (
     <Dialog open={status} onOpenChange={setStatus}>
       <DialogTrigger asChild>
-        <Button variant={'outline'}>Create</Button>
+        <Button variant={'shadow'}>Create</Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="tablet:min-w-[650px] h-auto">
         <DialogHeader>
           <DialogTitle>Create Custom Slug</DialogTitle>
         </DialogHeader>

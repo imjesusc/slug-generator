@@ -55,7 +55,7 @@ export const SlugCard = ({ id, url, shortUrl, slug, description }: CustomSlugInt
   }
 
   return (
-    <Card className="hover:bg-accent transition-colors">
+    <Card className=" bg-white backdrop-blur-lg shadow-medium border-transparent">
       <CardHeader className="flex justify-between">
         <div className="flex justify-between gap-4">
           <div className="grid gap-1">
@@ -122,7 +122,7 @@ export const SlugCard = ({ id, url, shortUrl, slug, description }: CustomSlugInt
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <DialogContent>
+            <DialogContent className="tablet:min-w-[650px]">
               <DialogHeader>
                 <DialogTitle>Are you absolutely sure?</DialogTitle>
               </DialogHeader>

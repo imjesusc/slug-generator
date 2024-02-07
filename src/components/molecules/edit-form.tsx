@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { FormControl, FormField, FormItem, FormLabel, FormMessage, Form } from '@/components/ui'
+import { FormControl, FormField, FormItem, FormLabel, FormMessage, Form, DialogClose } from '@/components/ui'
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -112,16 +112,24 @@ export const EditForm = ({ slugData, setStatus }: ControlsFormProps) => {
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Textarea className="max-h-[130px]" placeholder="This custom slug is for my page..." {...field} />
+                <Textarea
+                  className="h-[120px] max-h-[120px]"
+                  placeholder="This custom slug is for my page..."
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <div>
-          <Button variant={'primary'} className="w-full">
-            {isLoading ? <span className="animate-pulse">...</span> : <span>Edit slug</span>}
+        <div className="flex justify-between gap-4">
+          <DialogClose asChild>
+            <Button variant={'ghost'}>Cancel</Button>
+          </DialogClose>
+
+          <Button variant={'shadow'} size={'lg'}>
+            {isLoading ? <span className="animate-pulse">...</span> : <span>{'Update'}</span>}
           </Button>
         </div>
       </form>

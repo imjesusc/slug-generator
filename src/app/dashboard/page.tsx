@@ -12,15 +12,16 @@ export default function DashboardPage({ searchParams }: { searchParams: { search
   const search = searchParams.search || ''
 
   return (
-    <main className="container my-10 gap-4">
+    <main className="container my-3 gap-4">
       <div className="grid gap-4">
-        <div className="flex justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold">Dashboard</h1>
-            <p className="text-balance">Create and manage your slugs in one place 🎉.</p>
-          </div>
+        <header>
+          <h1 className="tracking-tight font-sans font-semibold text-[2.5rem]  bg-clip-text">Dashboard</h1>
+          <p className="text-balance text-muted-foreground">Create and manage your slugs in one place 🎉.</p>
+        </header>
+
+        <div className="mb-4">
+          <FilterField />
         </div>
-        <FilterField />
         <Suspense key={searchParams.search} fallback={<GroupSlugsCardSkeleton />}>
           <GroupSlugsCard search={search} />
         </Suspense>
