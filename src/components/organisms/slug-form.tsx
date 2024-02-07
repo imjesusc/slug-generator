@@ -10,6 +10,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { DialogClose } from '@radix-ui/react-dialog'
 
 export const SlugForm = ({ setStatus }: any) => {
   const [isLoading, setIsLoading] = useState(false)
@@ -104,16 +105,24 @@ export const SlugForm = ({ setStatus }: any) => {
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Textarea className="max-h-[130px]" placeholder="This custom slug is for my page..." {...field} />
+                <Textarea
+                  className="h-[120px] max-h-[120px]"
+                  placeholder="This custom slug is for my page..."
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <div>
-          <Button variant={'primary'} className="w-full">
-            {isLoading ? <span className="animate-pulse">...</span> : <span>{'Confirm'}</span>}
+        <div className="flex justify-between gap-4">
+          <DialogClose asChild>
+            <Button variant={'ghost'}>Cancel</Button>
+          </DialogClose>
+
+          <Button variant={'shadow'}>
+            {isLoading ? <span className="animate-pulse">...</span> : <span>{'Create'}</span>}
           </Button>
         </div>
       </form>
