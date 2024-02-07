@@ -1,3 +1,4 @@
+import { log } from 'console'
 import { cookies } from 'next/headers'
 import { NextResponse, type NextRequest } from 'next/server'
 
@@ -24,35 +25,38 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
-  try {
-    // Fetching Custom Shortened Url
-    const resCustomSlug = await fetch(`${baseUrl}/api/slugs/${customSlug}`)
-    const dataCustomSlug = await resCustomSlug.json()
+  if (pathname.includes('/s/')) {
+    try {
+      // Fetching Simple Shortened Url
+      const resSimpleSlug = await fetch(`${baseUrl}/api/slug?slug=${customSlug}`)
+      const dataSimpleSlug = await resSimpleSlug.json()
 
-    // Custom Shortened Url
-    if (dataCustomSlug?.userSlug?.url) {
-      return NextResponse.redirect(new URL(dataCustomSlug.userSlug.url))
+      // Simple Shortened Url
+      if (dataSimpleSlug?.getSimpleSlug?.originalUrl) {
+        return NextResponse.redirect(new URL(dataSimpleSlug.getSimpleSlug.originalUrl))
+      }
+    } catch (error) {
+      console.error('Error fetching simple slug:', error)
     }
-  } catch (error) {
-    console.error('Error fetching custom slug:', error)
-  }
+  } else {
+    try {
+      // Fetching Custom Shortened Url
+      const resCustomSlug = await fetch(`${baseUrl}/api/slugs/${customSlug}`)
+      const dataCustomSlug = await resCustomSlug.json()
 
-  try {
-    // Fetching Simple Shortened Url
-    const resSimpleSlug = await fetch(`${baseUrl}/api/slug?slug=${customSlug}`)
-    const dataSimpleSlug = await resSimpleSlug.json()
-
-    // Simple Shortened Url
-    if (dataSimpleSlug?.getSimpleSlug?.originalUrl) {
-      return NextResponse.redirect(new URL(dataSimpleSlug.getSimpleSlug.originalUrl))
+      // Custom Shortened Url
+      if (dataCustomSlug?.userSlug?.url) {
+        return NextResponse.redirect(new URL(dataCustomSlug.userSlug.url))
+      }
+    } catch (error) {
+      console.error('Error fetching custom slug:', error)
     }
-  } catch (error) {
-    console.error('Error fetching simple slug:', error)
   }
 }
 
 export const config = {
   matcher: [
     '/((?!api|_next/static|_next/image|favicon.ico|not-found.svg|personal.png|dashboard|favicon-16x16.png|404).*)',
+    '/s/:slug*',
   ],
 }

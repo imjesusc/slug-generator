@@ -31,6 +31,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
+
     const { originalUrl, customSlug } = simpleFormSchema.parse(body)
     const existingSlug = await prisma.simpleShortenedUrl.findUnique({
       where: { customSlug },
@@ -40,19 +41,22 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'Slug already exists.' }, { status: 400 })
     }
 
-    await prisma.simpleShortenedUrl.create({
+    const createdSlug = await prisma.simpleShortenedUrl.create({
       data: {
         originalUrl,
         customSlug,
       },
     })
 
-    return NextResponse.json({
-      originalUrl,
-      url: `${request.headers.get('x-forwarded-proto')}://${request.headers.get('host')}/${customSlug}`,
-      customSlug,
-      message: 'Slug created successfully.',
-    })
+    return NextResponse.json(
+      {
+        originalUrl: createdSlug.originalUrl,
+        url: `${request.headers.get('x-forwarded-proto')}://${request.headers.get('host')}/s/${customSlug}`,
+        customSlug: createdSlug.customSlug,
+        message: 'Slug created successfully.',
+      },
+      { status: 200 },
+    )
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       console.log(error.message)

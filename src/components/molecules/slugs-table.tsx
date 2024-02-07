@@ -63,7 +63,7 @@ export const SlugsTable: FC<SlugsTableProps> = ({ links }) => {
                 {link.customSlug}
               </Link>
             </TableCell>
-            <TableCell className="truncate  max-w-10 tablet:max-w-[300px]">{link.originalUrl}</TableCell>
+            <TableCell className="truncate  max-w-10 tablet:max-w-[300px]">{link.url}</TableCell>
             <TableCell className="flex items-end gap-4 justify-end">
               <Button
                 variant="outline"
