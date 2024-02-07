@@ -5,7 +5,6 @@ import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
   const url = new URL(request.url)
-  const newHeaders = new Headers(request.headers)
 
   const searchQuery = url.searchParams.get('search')
   const userId = url.searchParams.get('userId')
@@ -25,17 +24,8 @@ export async function GET(request: Request) {
       },
     })
 
-    newHeaders.set('cache-control', 'public, max-age=31536000, immutable')
-
-    // if (userSlugs.length > 0)
-    //   return NextResponse.json({ message: 'User slugs successfully retrieved', userSlugs }, { status: 200 })
-
-    return NextResponse.json(
-      { message: 'User slugs successfully retrieved', userSlugs },
-      {
-        headers: newHeaders,
-      },
-    )
+    if (userSlugs.length > 0)
+      return NextResponse.json({ message: 'User slugs successfully retrieved', userSlugs }, { status: 200 })
 
     return NextResponse.json({ message: 'Something went wrong.' }, { status: 500 })
   } catch (error) {

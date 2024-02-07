@@ -5,8 +5,6 @@ import { simpleFormSchema } from '@/lib/validations'
 
 export async function GET(request: Request) {
   const url = new URL(request.url)
-  const newHeaders = new Headers(request.headers)
-
   const customSlug = url.searchParams.get('slug')
   if (customSlug === '') return NextResponse.json({ message: 'Something went wrong. Slug not found.' }, { status: 500 })
 
@@ -19,18 +17,7 @@ export async function GET(request: Request) {
       },
     })
 
-    // Configuración de encabezados CORS
-    newHeaders.set('Access-Control-Allow-Origin', '*') // Permitir solicitudes desde cualquier origen
-    newHeaders.set('Access-Control-Allow-Methods', 'GET, OPTIONS') // Permitir métodos GET y OPTIONS
-    newHeaders.set('Access-Control-Allow-Headers', 'Content-Type') // Permitir el encabezado Content-Type
-
-    // Configuración de caché
-    newHeaders.set('Cache-Control', 'public, max-age=31536000, immutable')
-
-    return NextResponse.json(
-      { message: 'User slugs successfully retrieved.', getSimpleSlug },
-      { status: 200, headers: newHeaders },
-    )
+    return NextResponse.json({ message: 'User slugs successfully retrieved.', getSimpleSlug }, { status: 200 })
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       console.log(error.message)
