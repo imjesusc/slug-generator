@@ -53,6 +53,7 @@ export const SlugsTable: FC<SlugsTableProps> = ({ links }) => {
           <TableRow key={link.customSlug} className={cn(index === 0 && 'bg-pink-100 hover:opacity-80')}>
             <TableCell>
               <Link
+                prefetch={false}
                 className="hover:underline font-medium"
                 target="_blank"
                 title={link.customSlug}

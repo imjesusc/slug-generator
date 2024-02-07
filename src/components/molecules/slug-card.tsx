@@ -61,6 +61,7 @@ export const SlugCard = ({ id, url, shortUrl, slug, description }: CustomSlugInt
           <div className="grid gap-1">
             <div className="flex items-center gap-3">
               <Link
+                prefetch={false}
                 href={shortUrl ?? ''}
                 target="_blank"
                 className="hover:underline underline-offset-1"
