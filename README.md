@@ -13,6 +13,7 @@
   </nav>
 </div>
 
+<p></p>
 <div align="center">
   <img src="https://img.shields.io/badge/Next.js-000?logo=Next.js&logoColor=fff&style=flat" alt="Next.js Badge">
   <img src="https://img.shields.io/github/stars/imjesusc/slug-generator" alt="GitHub stars">
