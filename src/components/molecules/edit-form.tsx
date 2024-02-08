@@ -44,6 +44,7 @@ export const EditForm = ({ slugData, setStatus }: ControlsFormProps) => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        'x-api-key': process.env.NEXT_PUBLIC_API_KEY as string,
       },
       body: JSON.stringify(putData),
     }

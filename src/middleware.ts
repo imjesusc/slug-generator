@@ -45,7 +45,11 @@ export async function middleware(request: NextRequest) {
   } else {
     try {
       // Fetching Custom Shortened Url
-      const resCustomSlug = await fetch(`${baseUrl}/api/slugs/${customSlug}`)
+      const resCustomSlug = await fetch(`${baseUrl}/api/slugs/${customSlug}`, {
+        headers: {
+          'x-api-key': apiKey as string,
+        },
+      })
       const dataCustomSlug = await resCustomSlug.json()
 
       // Custom Shortened Url

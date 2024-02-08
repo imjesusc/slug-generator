@@ -4,7 +4,13 @@ import { authOptions } from '@/lib/authOptions'
 import { SlugCard } from '../molecules'
 
 const getSlugsData = async (userId: string, query?: string) => {
-  const res = await fetch(`${process.env.NEXTAUTH_URL}/api/slugs?userId=${userId}&search=${query}`)
+  const res = await fetch(`${process.env.NEXTAUTH_URL}/api/slugs?userId=${userId}&search=${query}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': process.env.NEXT_PUBLIC_API_KEY as string,
+    },
+  })
   const resData = await res.json()
   return resData.userSlugs
 }

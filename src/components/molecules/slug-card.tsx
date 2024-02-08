@@ -40,6 +40,7 @@ export const SlugCard = ({ id, url, shortUrl, slug, description }: CustomSlugInt
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
+        'x-api-key': process.env.NEXT_PUBLIC_API_KEY as string,
       },
     })
 
