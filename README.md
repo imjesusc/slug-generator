@@ -1,5 +1,10 @@
 <div align="center">
-  <h2>🔗 Slug Generator</h2>
+
+  <img src="./public/fav.svg" width="100" alt="Next.js Badge">
+
+</span>
+
+  <h2>Slug Generator</h2>
 </div>
 
 <p></p>
