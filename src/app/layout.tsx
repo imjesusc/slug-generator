@@ -13,9 +13,7 @@ export const metadata: Metadata = {
   title: 'Slug Generator - Open source custom slug generator',
   description: 'Open source custom slug generator—create unique and memorable slugs for any purpose.',
   icons: {
-    icon: '/favicon.ico?v=1',
-    shortcut: '/favicon-16x16.png',
-    apple: '/apple-touch-icon.png',
+    icon: '/favicon.svg?v=1',
   },
 }
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
