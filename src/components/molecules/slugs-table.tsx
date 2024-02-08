@@ -18,11 +18,11 @@ export const SlugsTable: FC<SlugsTableProps> = ({ links }) => {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
+          'x-api-key': process.env.NEXT_PUBLIC_API_KEY as string,
         },
       }
       // Fetching Simple Shortened Url
       const res = await fetch(`/api/slug?slug=${slug}`, OPTIONS)
-      console.log(res)
       if (!res.ok) {
         const errorData = await res.json()
         toast.error(errorData.message as ReactNode)
@@ -58,17 +58,17 @@ export const SlugsTable: FC<SlugsTableProps> = ({ links }) => {
                 target="_blank"
                 title={link.customSlug}
                 rel="noreferrer"
-                href={`${link.url}`}
+                href={`${link.shortenedUrl}`}
               >
                 {link.customSlug}
               </Link>
             </TableCell>
-            <TableCell className="truncate  max-w-10 tablet:max-w-[300px]">{link.url}</TableCell>
+            <TableCell className="truncate  max-w-10 tablet:max-w-[300px]">{link.shortenedUrl}</TableCell>
             <TableCell className="flex items-end gap-4 justify-end">
               <Button
                 variant="outline"
                 onClick={async () => {
-                  await copyToClipboard(`${link.url}`)
+                  await copyToClipboard(`${link.shortenedUrl}`)
                 }}
               >
                 <CopyIcon />

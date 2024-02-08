@@ -8,7 +8,6 @@ import { SlugsTable } from '../molecules'
 export function SimpleSlugTable() {
   const { links } = useLinkStore()
   const [data, setData] = useState<SimpleSlugInterface[]>([])
-
   useEffect(() => {
     const reversedLinks = links.slice().reverse()
     setData(reversedLinks)

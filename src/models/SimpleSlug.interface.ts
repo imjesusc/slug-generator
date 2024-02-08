@@ -1,6 +1,5 @@
 export interface SimpleSlugInterface {
-  url: string
+  shortenedUrl: string
   slug: string
   customSlug: string
-  originalUrl: string
 }

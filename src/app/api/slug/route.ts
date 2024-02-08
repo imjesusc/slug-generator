@@ -4,6 +4,12 @@ import { Prisma } from '@prisma/client'
 import { simpleFormSchema } from '@/lib/validations'
 
 export async function GET(request: Request) {
+  const apiKey = request.headers.get('x-api-key')
+
+  if (apiKey !== process.env.NEXT_PUBLIC_API_KEY) {
+    return NextResponse.json({ message: 'Unauthorized.' }, { status: 401 })
+  }
+
   const url = new URL(request.url)
   const customSlug = url.searchParams.get('slug')
   if (customSlug === '') return NextResponse.json({ message: 'Something went wrong. Slug not found.' }, { status: 500 })
@@ -30,6 +36,12 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const apiKey = request.headers.get('x-api-key')
+
+    if (apiKey !== process.env.NEXT_PUBLIC_API_KEY) {
+      return NextResponse.json({ message: 'Unauthorized.' }, { status: 401 })
+    }
+
     const body = await request.json()
 
     const { originalUrl, customSlug } = simpleFormSchema.parse(body)
@@ -50,8 +62,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(
       {
-        originalUrl: createdSlug.originalUrl,
-        url: `${request.headers.get('x-forwarded-proto')}://${request.headers.get('host')}/s/${customSlug}`,
+        shortenedUrl: `${request.headers.get('x-forwarded-proto')}://${request.headers.get('host')}/s/${customSlug}`,
         customSlug: createdSlug.customSlug,
         message: 'Slug created successfully.',
       },
@@ -68,13 +79,20 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const url = new URL(request.url)
-  const customSlug = url.searchParams.get('slug')
-
-  if (customSlug === '') return NextResponse.json({ message: 'Something went wrong. Slug not found.' }, { status: 500 })
-
-  if (!customSlug) return NextResponse.json({ message: 'Something went wrong. Slug not found.' }, { status: 500 })
   try {
+    const apiKey = request.headers.get('x-api-key')
+
+    if (apiKey !== process.env.NEXT_PUBLIC_API_KEY) {
+      return NextResponse.json({ message: 'Unauthorized.' }, { status: 401 })
+    }
+
+    const url = new URL(request.url)
+    const customSlug = url.searchParams.get('slug')
+
+    if (customSlug === '')
+      return NextResponse.json({ message: 'Something went wrong. Slug not found.' }, { status: 500 })
+
+    if (!customSlug) return NextResponse.json({ message: 'Something went wrong. Slug not found.' }, { status: 500 })
     const getSimpleSlug = await prisma.simpleShortenedUrl.findUnique({
       where: {
         customSlug,

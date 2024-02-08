@@ -6,6 +6,7 @@ export async function middleware(request: NextRequest) {
   const tokenName =
     process.env.NODE_ENV === 'development' ? 'next-auth.session-token' : process.env.NEXT_AUTH_TOKEN_NAME_PROD
   const nextAuthToken = cookieStore.get(tokenName as string)
+  const apiKey = process.env.NEXT_PUBLIC_API_KEY
 
   const { pathname } = request.nextUrl
   const baseUrl = request.nextUrl.origin
@@ -27,7 +28,11 @@ export async function middleware(request: NextRequest) {
   if (pathname.includes('/s/')) {
     try {
       // Fetching Simple Shortened Url
-      const resSimpleSlug = await fetch(`${baseUrl}/api/slug?slug=${customSlug}`)
+      const resSimpleSlug = await fetch(`${baseUrl}/api/slug?slug=${customSlug}`, {
+        headers: {
+          'x-api-key': apiKey as string,
+        },
+      })
       const dataSimpleSlug = await resSimpleSlug.json()
 
       // Simple Shortened Url

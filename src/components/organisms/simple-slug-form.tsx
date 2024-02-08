@@ -24,14 +24,16 @@ export const SimpleSlugForm = () => {
 
   const onSubmit = async (data: z.infer<typeof simpleFormSchema>) => {
     setIsLoading(true)
-    const OPTIONS = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    }
     try {
+      const OPTIONS = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': process.env.NEXT_PUBLIC_API_KEY as string,
+        },
+        body: JSON.stringify(data),
+      }
+
       const response = await fetch('/api/slug', OPTIONS)
 
       if (!response.ok) {

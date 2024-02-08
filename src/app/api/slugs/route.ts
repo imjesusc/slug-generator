@@ -8,7 +8,6 @@ export async function GET(request: Request) {
 
   const searchQuery = url.searchParams.get('search')
   const userId = url.searchParams.get('userId')
-
   if (!userId) return NextResponse.json({ message: 'Something went wrong. Id not found' }, { status: 500 })
 
   try {
